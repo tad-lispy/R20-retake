@@ -10,8 +10,11 @@
   "author": "Tadeusz Łazurski <tadeusz@lazurski.pl> (http://lazurski.pl/)",
   "license": "GPL 3",
   "dependencies": {
+    "body-parser": "^1.4.3",
     "config-object": "^0.2.0",
-    "express": "^4.4.5"
+    "cson": "^1.6.0",
+    "express": "^4.4.5",
+    "underscore.string": "^2.3.3"
   },
   "devDependencies": {
     "coffee-script": "^1.7.1",
