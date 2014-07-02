@@ -12,6 +12,8 @@
     "express": "^4.4.5"
   },
   "devDependencies": {
+    "coffee-script": "^1.7.1",
+    "del": "^0.1.1",
     "gulp": "^3.8.5",
     "gulp-coffee": "^2.0.1",
     "gulp-mocha": "^0.4.1"
