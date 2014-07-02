@@ -7,8 +7,9 @@ nodemon = require 'gulp-nodemon'
 del     = require 'del'
 
 paths   =
-  src : 'src/**/*.coffee'
-  test: 'test/**/*.coffee'
+  src   : 'src/**/*.coffee'
+  test  : 'test/**/*.coffee'
+  config: ['*.cson', 'package.json']
 
 gulp.task 'clean', (done) ->
   del 'lib', done
@@ -35,9 +36,9 @@ gulp.task 'develop', ->
   nodemon
     watch : [
       paths.src
-      '*.cson'
+      paths.config
     ]
-    ext   : 'coffee cson'
+    ext   : 'coffee cson json'
     script: 'src/app.coffee'
 
 gulp.task 'default', ['build', 'test', 'watch']
