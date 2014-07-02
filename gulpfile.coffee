@@ -31,9 +31,13 @@ gulp.task 'test', ->
       compilers : 'coffee:coffee-script'
       reporter  : 'spec'
 
-gulp.task 'develop', ['watch'], ->
+gulp.task 'develop', ->
   nodemon
-    ext   : 'js'
-    script: 'lib/app.js'
+    watch : [
+      paths.src
+      '*.cson'
+    ]
+    ext   : 'coffee cson'
+    script: 'src/app.coffee'
 
 gulp.task 'default', ['build', 'test', 'watch']
