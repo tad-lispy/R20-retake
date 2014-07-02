@@ -2,6 +2,8 @@ gulp    = require 'gulp'
 
 coffee  = require 'gulp-coffee'
 mocha   = require 'gulp-mocha'
+nodemon = require 'gulp-nodemon'
+
 del     = require 'del'
 
 paths   =
@@ -28,5 +30,10 @@ gulp.task 'test', ->
     .pipe mocha
       compilers : 'coffee:coffee-script'
       reporter  : 'spec'
+
+gulp.task 'develop', ['watch'], ->
+  nodemon
+    ext   : 'js'
+    script: 'lib/app.js'
 
 gulp.task 'default', ['build', 'test', 'watch']

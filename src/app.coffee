@@ -1,3 +1,5 @@
+console.log 'Charging R20...'
+
 express = require 'express'
 config  = require 'config-object'
 
