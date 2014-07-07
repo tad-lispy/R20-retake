@@ -18,7 +18,8 @@ app.use require './middleware/log-request'
 express.response.serve = require './middleware/serve-response'
 
 app.get '/', (req, res) ->
-  res.send 'Hello, R20.'
+  res.template = require './templates/index'
+  res.serve 'Hello, R20.'
 
 # Load routers
 app.use "/#{route}", require "./routers/#{route}" for route in [
