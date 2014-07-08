@@ -2,9 +2,10 @@
   "name": "R20",
   "version": "0.0.0",
   "description": "Legal knowledge aggregator",
-  "main": "lib/app.js",
+  "main": "build/backend/app.js",
   "scripts": {
     "develop": "gulp develop",
+    "build": "gulp build",
     "test": "gulp test"
   },
   "author": "Tadeusz Łazurski <tadeusz@lazurski.pl> (http://lazurski.pl/)",
@@ -23,6 +24,8 @@
     "gulp": "^3.8.5",
     "gulp-coffee": "^2.0.1",
     "gulp-mocha": "^0.4.1",
-    "gulp-nodemon": "^1.0.4"
+    "gulp-nodemon": "^1.0.4",
+    "gulp-rename": "^1.2.0",
+    "gulp-stylus": "^1.0.3"
   }
 }

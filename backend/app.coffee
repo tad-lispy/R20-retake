@@ -11,6 +11,10 @@ config.load [
   '../config.cson'
 ]
 
+# Configure templates
+Template = require 'teacup-view'
+Template.load_components 'templates/components'
+
 # Controllers and other middleware
 app.use require('body-parser').json()
 app.use require './middleware/log-request'
@@ -18,7 +22,7 @@ app.use require './middleware/log-request'
 express.response.serve = require './middleware/serve-response'
 
 app.get '/', (req, res) ->
-  res.template = require './templates/index'
+  res.template = require './templates/home'
   res.serve 'Hello, R20.'
 
 # Load routers
