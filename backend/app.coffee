@@ -3,8 +3,9 @@
 # Initialization and config
 console.log 'Charging R20...'
 
-express = require 'express'
-config  = require 'config-object'
+express  = require 'express'
+mongoose = require 'mongoose'
+config   = require 'config-object'
 
 app     = new express
 config.load [
@@ -23,6 +24,9 @@ express.response.serve = require './middleware/serve-response'
 
 # Load routers
 app.use '/', require './routers'
+
+# Connect to data store
+mongoose.connect Array(config.mongo.url).join ','
 
 # Fire!
 app.listen config.port

@@ -5,3 +5,6 @@ port  : 3210
 site  :
   title : "Radzimy.co"
   motto : "podnosimy świadomość prawną"
+
+mongo :
+  url   : "mongodb://localhost/r20"
