@@ -1,6 +1,6 @@
 # What is this? See: https://github.com/lzrski/atomic-rest
 
-GET http://localhost:3210/
+GET http://localhost:3210/stories/
 
 ### Response
 # Headers:
@@ -8,11 +8,11 @@ GET http://localhost:3210/
   "x-powered-by": "Express",
   "vary": "Accept",
   "content-type": "application/json; charset=utf-8",
-  "content-length": "13",
-  "etag": "W/\"d-1588670486\"",
-  "date": "Thu, 10 Jul 2014 18:31:22 GMT",
+  "content-length": "2",
+  "etag": "W/\"2-223132457\"",
+  "date": "Thu, 10 Jul 2014 21:06:27 GMT",
   "connection": "close"
 }
 # Body:
-"Hello, R20."
+[]
 ###

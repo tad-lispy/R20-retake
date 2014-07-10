@@ -2,10 +2,14 @@ express = require 'express'
 
 router = new express.Router
 
+Story  = require "../models/Story"
+
 # List's of stories operations
 router.route '/'
   .get (req, res) ->
-    res.serve 'A list of stories'
+    Story.find (error, stories) ->
+      if error then res.emit error
+      res.serve stories
   .post (req, res) ->
     res.serve 'A new story'
 
