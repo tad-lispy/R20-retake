@@ -9,7 +9,7 @@ module.exports = (code, data) ->
   console.log ""
 
   # Add common properties to served data
-  _.extend data, _.pick req, [
+  _.extend data, _.pick @, [
     'csrf'
     'participant'
   ]

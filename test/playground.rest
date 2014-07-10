@@ -1,0 +1,18 @@
+# What is this? See: https://github.com/lzrski/atomic-rest
+
+GET http://localhost:3210/
+
+### Response
+# Headers:
+{
+  "x-powered-by": "Express",
+  "vary": "Accept",
+  "content-type": "application/json; charset=utf-8",
+  "content-length": "13",
+  "etag": "W/\"d-1588670486\"",
+  "date": "Thu, 10 Jul 2014 18:31:22 GMT",
+  "connection": "close"
+}
+# Body:
+"Hello, R20."
+###
