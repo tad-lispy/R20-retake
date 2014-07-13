@@ -1,7 +1,7 @@
 # Participant model
 
 mongoose    = require "mongoose"
-_           = require "underscore"
+_           = require "lodash"
 
 valid =
   roles: [
@@ -12,16 +12,16 @@ valid =
   ] # TODO: read from config.participants
 
 Participant  = new mongoose.Schema
-  name      : 
+  name      :
     type      : String
     required  : yes
-  roles     : 
+  roles     :
     type      : [ String ]
     # validate  : [
     #   validator : (roles) -> roles.length
     #   msg       : "At least one role required"
     # ,
-    #   validator : (roles) -> 
+    #   validator : (roles) ->
     #     for role in roles
     #       if not (role in valid.roles) then return no
     #     return yes
@@ -29,18 +29,18 @@ Participant  = new mongoose.Schema
     # ]
   can       : {
     ###
-    ## Capabilities 
+    ## Capabilities
 
     Per request this will be defaulted with role.capabilities,
     and then checked in various contollers and views.
     ###
     type      : Object
     default   : {}
-  } 
+  }
   # TODO: validation (unique values, limit to set)
   bio       : String
   titles    : String
-  email     : 
+  email     :
     type      : String # TODO: validation (unique values, morphology)
     required  : yes
     unique    : yes

@@ -17,16 +17,23 @@ config.load [
 # Configure templates
 require('teacup-view').load_components __dirname + '/templates/components'
 
+# Connect to data store
+mongoose.connect Array(config.mongo.url).join ','
+
 # Load middleware
+app.use require('cookie-parser')()
 app.use require('body-parser').json()
+app.use require('body-parser').urlencoded()
+app.use require('express-session') secret: config.app.secret
+app.use require('passport').initialize()
+app.use require('passport').session()
 app.use require './middleware/log-request'
+
 express.response.serve = require './middleware/serve-response'
 
 # Load routers
 app.use '/', require './routers'
 
-# Connect to data store
-mongoose.connect Array(config.mongo.url).join ','
 
 # Fire!
 app.listen config.port

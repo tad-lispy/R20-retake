@@ -1,18 +1,5 @@
 # What is this? See: https://github.com/lzrski/atomic-rest
 
-GET http://localhost:3210/stories/
-
-### Response
-# Headers:
-{
-  "x-powered-by": "Express",
-  "vary": "Accept",
-  "content-type": "application/json; charset=utf-8",
-  "content-length": "2",
-  "etag": "W/\"2-223132457\"",
-  "date": "Thu, 10 Jul 2014 21:06:27 GMT",
-  "connection": "close"
-}
-# Body:
-[]
-###
+POST http://localhost:3210/authenticate
+  email    : 'tadeusz@lazurski.pl'
+  password : 'abcd4321'

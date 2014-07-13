@@ -1,5 +1,5 @@
 # Index (/) route
-express = require 'express'
+express  = require 'express'
 
 router = new express.Router
 
@@ -11,6 +11,7 @@ router.route '/'
 
 # Load subrutes
 router.use "/#{route}", require "./#{route}" for route in [
+  'authenticate'
   'stories'
   # TODO:
   # 'questions'

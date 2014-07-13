@@ -2,6 +2,9 @@ scheme: 'http'
 host  : 'localhost'
 port  : 3210
 
+app   :
+  secret: 'Zdradzę wam potworny sekret... Jestem ciasteczkowym potworem!'
+
 site  :
   title : "Radzimy.co"
   motto : "podnosimy świadomość prawną"
