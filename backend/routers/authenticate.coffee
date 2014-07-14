@@ -35,13 +35,15 @@ passport.deserializeUser (user, done) ->
 # And now for the main thing (routes)
 router   = new express.Router
 
-router.route '/'
-  .get (req, res) ->
-    res.template = require '../templates/authenticate'
-    do res.serve
+router.route '/login'
   .post passport.authenticate 'local',
     successRedirect: '/' # TODO: something smarter then that
     failureRedirect: '/authenticate'
     # failureFlash   : yes
+
+router.route '/logout'
+  .post (req, res) ->
+    req.logout()
+    res.redirect '/'
 
 module.exports = router
