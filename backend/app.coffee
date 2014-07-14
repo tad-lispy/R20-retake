@@ -16,10 +16,16 @@ mongoose.connect Array(config.mongo.url).join ','
 # Load middleware
 app      = new express
 
+session  = require 'express-session'
+Store    = require('connect-mongo') session
+
 app.use require('cookie-parser')()
 app.use require('body-parser').json()
 app.use require('body-parser').urlencoded()
-app.use require('express-session') secret: config.app.secret
+app.use session
+  cookie: maxAge: 24 * 60 * 60 * 1000
+  secret: config.app.secret
+  store : new Store db: mongoose.connections[0].db
 app.use require('passport').initialize()
 app.use require('passport').session()
 app.use require './middleware/log-request'

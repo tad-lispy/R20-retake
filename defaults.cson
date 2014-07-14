@@ -11,3 +11,6 @@ site  :
 
 mongo :
   url   : "mongodb://localhost/r20"
+
+auth  :
+  fake  : no

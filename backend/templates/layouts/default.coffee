@@ -22,8 +22,7 @@ module.exports = new View (options = {}, content) ->
       title
       subtitle
       csrf
-      participant
-      _fake_login
+      user
     } = options
 
     @doctype 5
@@ -56,7 +55,7 @@ module.exports = new View (options = {}, content) ->
               class : "col-xs-12 col-sm-3"
               =>
                 do @navigation
-                @profileBox {participant, _fake_login}
+                @profileBox { user }
 
         @footer class: "container", =>
           @small =>

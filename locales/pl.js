@@ -5,5 +5,6 @@
 	"Questions": "Questions",
 	"Answers": "Answers",
 	"About": "About",
-	"Log in": "Log in"
+	"Log in": "Log in",
+	"Log out": "Log out"
 }
