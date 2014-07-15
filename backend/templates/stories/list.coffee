@@ -14,7 +14,7 @@ module.exports = new View (data) ->
     csrf
   } = data
 
-  
+
   layout data, =>
 
     @form
@@ -23,12 +23,12 @@ module.exports = new View (data) ->
       =>
         @div class: "input-group input-group-lg", =>
           @input
-            id          : "query"
+            id          : "search"
             type        : "text"
-            name        : "query"
+            name        : "search"
             class       : "form-control"
             placeholder : @cede => @translate "Type to search for story..."
-            value       : query
+            value       : query.search
           @div class: "input-group-btn", =>
             @button
               class : "btn btn-primary"
@@ -54,16 +54,16 @@ module.exports = new View (data) ->
           @a href: "/stories/#{story._id}", class: "panel-body list-group-item lead", =>
             @markdown story.text
           @div class: "panel-footer", =>
-            if story.questions.length 
+            if story.questions.length
               @ul class: "list-inline", =>
                 @strong "%d legal questions:", story.questions.length
                 for question in story.questions
                   @li => @a href: "/questions/#{question._id}", question.text
-            else @strong => @translate "No questions abstracted yet."            
-        
+            else @strong => @translate "No questions abstracted yet."
+
     else @div class: "alert alert-info", => @translate "Nothing like that found. Sorry :P"
-    
-    @modal 
+
+    @modal
       title : @cede => @translate "New story"
       id    : "story-new-dialog"
       =>
@@ -72,4 +72,3 @@ module.exports = new View (data) ->
           method  : "POST"
           action  : "/stories/"
           csrf    : csrf
-

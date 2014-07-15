@@ -11,7 +11,9 @@ module.exports = (code, data) ->
   ]
   _.extend data, _.pick @req, [
     'user'
+    'query'
   ]
+
 
   console.log "Serving response:"
   console.log cson.stringifySync data

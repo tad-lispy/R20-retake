@@ -6,10 +6,13 @@ Story  = require "../models/Story"
 
 # List's of stories operations
 router.route '/'
+
   .get (req, res) ->
+    res.template = require '../templates/stories/list'
     Story.find (error, stories) ->
-      if error then res.emit error
-      res.serve stories
+      if error then req.next error
+      res.serve {stories}
+
   .post (req, res) ->
     res.serve 'A new story'
 
