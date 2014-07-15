@@ -30,6 +30,7 @@ app.use require('passport').initialize()
 app.use require('passport').session()
 app.use require './middleware/log-request'
 app.use require './middleware/secure-request'
+app.use require './middleware/error'
 
 # Add useful serve method to response object protorype
 express.response.serve = require './middleware/serve-response'
