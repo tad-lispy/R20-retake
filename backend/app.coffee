@@ -1,4 +1,4 @@
-do require('source-map-support').install unless process.argv[0] is 'coffee' 
+do require('source-map-support').install unless process.argv[0] is 'coffee'
 
 # Initialization and config
 console.log 'Charging R20...'
@@ -29,6 +29,7 @@ app.use session
 app.use require('passport').initialize()
 app.use require('passport').session()
 app.use require './middleware/log-request'
+app.use require './middleware/secure-request'
 
 # Add useful serve method to response object protorype
 express.response.serve = require './middleware/serve-response'
