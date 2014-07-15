@@ -1,4 +1,4 @@
-do require('source-map-support').install
+do require('source-map-support').install unless process.argv[0] is 'coffee' 
 
 # Initialization and config
 console.log 'Charging R20...'
