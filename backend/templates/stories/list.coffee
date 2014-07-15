@@ -12,8 +12,8 @@ module.exports = new View (data) ->
     query
     stories
     csrf
+    user
   } = data
-
 
   layout data, =>
 
@@ -36,7 +36,7 @@ module.exports = new View (data) ->
               =>
                 @i class: "fa fa-fw fa-search"
                 @text "Search"
-            @dropdown items: [
+            if user?.can 'post stories' then @dropdown items: [
               title : @cede => @translate "new story"
               icon  : "plus-circle"
               data  :
@@ -63,7 +63,7 @@ module.exports = new View (data) ->
 
     else @div class: "alert alert-info", => @translate "Nothing like that found. Sorry :P"
 
-    @modal
+    if user?.can 'post stories' then @modal
       title : @cede => @translate "New story"
       id    : "story-new-dialog"
       =>

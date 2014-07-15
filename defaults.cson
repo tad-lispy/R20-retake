@@ -14,3 +14,27 @@ mongo :
 
 auth  :
   fake  : no
+
+participants:
+  roles:
+    reader:
+      can   : [
+        'post stories'
+      ]
+    student:
+      as     : 'reader'
+      can    : [
+        'post questions'
+        'post answers'
+      ]
+    lawyer:
+      as    : 'student'
+      can   : [
+        'publish questions'
+        'publish answers'
+      ]
+    editor:
+      as    : 'lawyer'
+      can   : 'publish stories'
+    administrator:
+      can: [ 'everything' ]

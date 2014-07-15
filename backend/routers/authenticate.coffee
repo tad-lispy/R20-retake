@@ -12,9 +12,9 @@ strategies  =
 passport.use new strategies.Local
   usernameField: 'email'
   (email, password, done) ->
-    console.log "Authenticating", { email, password, participants: config.participants}
-    data = _.find config.participants, (participant) ->
-      console.log "#{participant.email} is #{email} and #{participant.password} is #{password}"
+    { whitelist } = config.participants
+    if not whitelist?.length then done new Error2 "No whitelist specified in configuration."
+    data = _.find whitelist, (participant) ->
       participant.email is email and participant.password is password
 
     if data then return done null, new Participant data
@@ -30,7 +30,7 @@ passport.serializeUser (user, done) ->
   done null, user
 
 passport.deserializeUser (user, done) ->
-  done null, user
+  done null, new Participant user
 
 # And now for the main thing (routes)
 router   = new express.Router

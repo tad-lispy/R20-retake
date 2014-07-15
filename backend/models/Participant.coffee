@@ -2,14 +2,9 @@
 
 mongoose    = require "mongoose"
 _           = require "lodash"
+config      = require "config-object"
 
-valid =
-  roles: [
-    "reader"
-    "student"
-    "lawyer"
-    "editor"
-  ] # TODO: read from config.participants
+roles = _.cloneDeep config.participants.roles
 
 Participant  = new mongoose.Schema
   name      :
@@ -17,26 +12,24 @@ Participant  = new mongoose.Schema
     required  : yes
   roles     :
     type      : [ String ]
-    # validate  : [
-    #   validator : (roles) -> roles.length
-    #   msg       : "At least one role required"
-    # ,
-    #   validator : (roles) ->
-    #     for role in roles
-    #       if not (role in valid.roles) then return no
-    #     return yes
-    #   msg       : "Invalid roles"
-    # ]
-  can       : {
+    default   : [ 'reader' ]
+    validate  : [
+      validator : (roles) -> roles.length
+      msg       : "At least one role required"
+    ,
+      validator : (roles) ->
+        for role in roles
+          if not (role in (role for own role of roles)) then return no
+        return yes
+      msg       : "Invalid roles"
+    ]
+  capabilities:
     ###
-    ## Capabilities
-
     Per request this will be defaulted with role.capabilities,
     and then checked in various contollers and views.
     ###
-    type      : Object
-    default   : {}
-  }
+    type      : [ String ]
+    default   : []
   # TODO: validation (unique values, limit to set)
   bio       : String
   titles    : String
@@ -48,8 +41,32 @@ Participant  = new mongoose.Schema
     #   validator : (emails) -> emails.length
     #   msg       : "At least one email required"
 
+resolveRoleCapabilities = (spec, name, i = 0) ->
+  i += 1
+  if spec.as?
+    spec.can = _.union spec.can, resolveRoleCapabilities roles[spec.as], spec.as, i
+    delete spec.as
+  return spec.can
+
+for role, spec of roles
+  spec = resolveRoleCapabilities spec, role
+
+Participant.virtual('resolved_capabilities').get ->
+  capabilities = @capabilities
+  for name in @roles
+    capabilities = _.union capabilities, roles[name].can
+  return capabilities
+
+Participant.methods.can = (capability) ->
+  if 'everything' in @resolved_capabilities then yes
+  else capability in @resolved_capabilities
+
+Participant.set 'toObject', getters: yes
+Participant.set 'toJSON', getters: yes
+
 Participant.pre "validate", (next) ->
-  @roles  = _.unique @roles.map  (role)  -> do role.toLowerCase
+  @roles  = _.unique @roles.map  (role)      -> do role.toLowerCase
+  @can    = _.unique @can.map  (capability)  -> do capability.toLowerCase
   # @emails = _.unique @emails.map (email) -> do email.toLowerCase
   do next
 
