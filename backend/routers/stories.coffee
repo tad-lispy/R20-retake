@@ -16,8 +16,11 @@ router.route '/'
 
   .post approve('post stories'), (req, res) ->
     data = _.pick req.body, ['text']
-    res.serve 'Story posted'
-
+    story = new Story data
+    # TODO: Why error?
+    # story.saveDraft author: req.user.id, ->
+    #   res.redirect '/stories/' + story.id
+    res.serve {story}
 
 # Single story's operations
 router.route '/:story_id'
