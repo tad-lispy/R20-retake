@@ -16,7 +16,7 @@ module.exports = (error, req, res, next) ->
 
   if (Math.floor error.code / 100) is 4
     # If it's a client error, then let's client deal with it
-    return res.serve error.code, error
+    return res.serve error.code, {error}
 
   # Other kind of error.
   console.error "[!] Unhendeld error."
