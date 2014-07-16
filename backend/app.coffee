@@ -5,6 +5,7 @@ console.log 'Charging R20...'
 
 express  = require 'express'
 mongoose = require 'mongoose'
+path     = require "path"
 config   = require 'config-object'
 
 # Load configuration into config-object and do some other setup stuff
@@ -30,6 +31,9 @@ app.use require('passport').initialize()
 app.use require('passport').session()
 app.use require './middleware/log-request'
 app.use require './middleware/secure-request'
+
+# Serve static files
+app.use "/", express.static path.resolve process.cwd(), "build/frontend/"
 
 # Add useful serve method to response object protorype
 express.response.serve = require './middleware/serve-response'
