@@ -1,20 +1,23 @@
 express = require 'express'
+router  = new express.Router
+_       = require "lodash"
 
-router = new express.Router
-
-Story  = require "../models/Story"
+approve = require "../middleware/approve-request"
+Story   = require "../models/Story"
 
 # List's of stories operations
 router.route '/'
 
-  .get (req, res) ->
+  .get (req, res, done) ->
     res.template = require '../templates/stories/list'
     Story.find (error, stories) ->
       if error then req.next error
       res.serve {stories}
 
-  .post (req, res) ->
-    res.serve 'A new story'
+  .post approve('post stories'), (req, res) ->
+    data = _.pick req.body, ['text']
+    res.serve 'Story posted'
+
 
 # Single story's operations
 router.route '/:story_id'
