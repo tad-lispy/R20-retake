@@ -4,7 +4,10 @@ Error2 = require "error2"
 module.exports = (req, res, next) ->
   if req.user? or
      req.method in ['GET', 'HEAD'] or
-     req.method is 'POST' and req.url is '/authenticate/login'
+     req.method is 'POST' and req.url in [
+       '/authenticate/login'
+       '/authenticate/browserid'
+     ]
       return do next
 
   error = new Error2
