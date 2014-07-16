@@ -35,6 +35,8 @@ participants:
       ]
     editor:
       as    : 'lawyer'
-      can   : 'publish stories'
+      can   : [
+        'publish stories'
+      ]
     administrator:
       can: [ 'everything' ]
