@@ -30,13 +30,16 @@ app.use require('passport').initialize()
 app.use require('passport').session()
 app.use require './middleware/log-request'
 app.use require './middleware/secure-request'
-app.use require './middleware/error'
 
 # Add useful serve method to response object protorype
 express.response.serve = require './middleware/serve-response'
 
 # Load routers
 app.use '/', require './routers'
+
+# Contrary to Express guide, error middleware MUST be declared last
+# Otherwise it wont work be triggered if error is passed to req.next of later middleware (eg. routers)
+app.use require './middleware/error'
 
 # Fire!
 app.listen config.port
