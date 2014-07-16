@@ -41,20 +41,21 @@ Participant  = new mongoose.Schema
     #   validator : (emails) -> emails.length
     #   msg       : "At least one email required"
 
+roles = config.get 'participants/roles'
 resolveRoleCapabilities = (spec, name, i = 0) ->
   i += 1
   if spec.as?
-    spec.can = _.union spec.can, resolveRoleCapabilities config.get "participants/roles/#{spec.as}", spec.as, i
+    spec.can = _.union spec.can, resolveRoleCapabilities roles[spec.as], spec.as, i
     delete spec.as
   return spec.can
 
-for role, spec of config.get 'participants/roles'
+for role, spec of roles
   spec = resolveRoleCapabilities spec, role
 
 Participant.virtual('resolved_capabilities').get ->
   capabilities = @capabilities
   for name in @roles
-    capabilities = _.union capabilities, config.get "participants/roles/#{name}".can
+    capabilities = _.union capabilities, roles[name].can
   return capabilities
 
 Participant.methods.can = (capability) ->
