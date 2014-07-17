@@ -11,7 +11,9 @@ module.exports = new View (data = {}) ->
   @div class: "panel panel-default sidebar-nav", =>
     @nav class: "panel-body", =>
       if user?
-        @h5 user.name
+        @h5 => @a
+          href: "/participants/#{user.id}"
+          user.name
         @h6 user.roles.join ", "
         unless auth.fake
           @form

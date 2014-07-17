@@ -22,8 +22,8 @@ module.exports = new View (options = {}) ->
     icon    : "puzzle-piece"
     shortcut: "g a"
   ,
-    title   : "About"
-    url     : "/about"
+    title   : "About us"
+    url     : "/participants"
     icon    : "group"
     shortcut: "g i"
 

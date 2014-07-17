@@ -14,5 +14,6 @@
 	"Please tell us your story.": "Please tell us your story.",
 	"What's the story?": "What's the story?",
 	"Give us the facts, we will give you the law...": "Give us the facts, we will give you the law...",
-	"Ok": "Ok"
+	"Ok": "Ok",
+	"About us": "About us"
 }

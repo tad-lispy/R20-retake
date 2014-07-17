@@ -12,6 +12,7 @@ router.route '/'
 # Load subrutes
 router.use "/#{route}", require "./#{route}" for route in [
   'authenticate'
+  'participants'
   'stories'
   # TODO:
   # 'questions'
