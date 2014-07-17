@@ -17,7 +17,7 @@ router.route '/'
 # Single story's operations
 router.route '/:id'
   .get (req, res) ->
-    # res.template = require '../templates/participants/single'
+    res.template = require '../templates/participants/single'
     Participant.findById req.params.id, (error, participant) ->
       if error then return done error
       res.serve {participant}
