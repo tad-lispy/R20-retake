@@ -5,17 +5,27 @@ _.string  = require "underscore.string"
 config    = require "config-object"
 
 module.exports = new View (data = {}) ->
-  { user } = data
+  {
+    participant    # Profile to display
+    show_auth      # Should auth controls be displayed
+    class: clss    # HTML element class (renamed to avoid syntax error)
+  } = data
+
   { auth } = config
 
-  @div class: "panel panel-default sidebar-nav", =>
+  show_auth ?= yes
+  clss ?= ''
+
+  @div class: "panel panel-default sidebar-nav #{clss}", =>
     @nav class: "panel-body", =>
-      if user?
+      if participant?
         @h5 => @a
-          href: "/participants/#{user.id}"
-          user.name
-        @h6 user.roles.join ", "
-        unless auth.fake
+          href: "/participants/#{participant.id}"
+          participant.name
+        @ul class: "list-inline", => for role in participant.roles
+           @li => @translate role
+
+        if show_auth and not auth.fake
           @form
             class : 'form'
             action: '/authenticate/logout'
@@ -28,47 +38,11 @@ module.exports = new View (data = {}) ->
                 =>
                   @i class: "fa fa-fw fa-power-off"
                   @translate "Log out"
-      else unless auth.fake
+
+      # No participant (e.g. user's profile box and user not logged in)
+      else if show_auth and not auth.fake
         @button
           class: 'browserid login btn btn-link'
           =>
             @i class: "fa fa-fw fa-check-circle"
             @translate  "Log in"
-
-        # @form
-        #   method: 'POST'
-        #   action: '/authenticate/login'
-        #   class : 'autenticate form', =>
-        #     @div class: 'form-group', =>
-        #       @label
-        #         for  : 'email'
-        #         class: 'control-label sr-only'
-        #         'e-mail'
-        #       @div class: 'input-group', =>
-        #         @span class: 'input-group-addon', => @i class: 'fa fa-fw fa-envelope-o'
-        #         @input
-        #           type : 'email'
-        #           name : 'email'
-        #           id   : 'email'
-        #           placeholder: 'email address'
-        #           class: 'form-control'
-        #     @div class: 'form-group', =>
-        #       @label
-        #         for: 'password'
-        #         class: 'control-label sr-only'
-        #         'password:'
-        #       @div class: 'input-group', =>
-        #         @span class: 'input-group-addon', => @i class: 'fa fa-fw fa-lock'
-        #         @input
-        #           type : 'password'
-        #           name : 'password'
-        #           id   : 'password'
-        #           placeholder: 'password'
-        #           class: 'form-control'
-        #     @div class: 'form-group', =>
-        #       @button
-        #         type : 'submit'
-        #         class: 'submit btn btn-link'
-        #         =>
-        #           @i class: "fa fa-fw fa-check-circle"
-        #           @translate  "Log in"

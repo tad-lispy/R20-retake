@@ -55,7 +55,7 @@ module.exports = new View (options = {}, content) ->
               class : "col-xs-12 col-sm-3"
               =>
                 do @navigation
-                @profileBox { user }
+                @profileBox participant: user
 
         @footer class: "container", =>
           @small =>

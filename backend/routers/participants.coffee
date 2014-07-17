@@ -9,7 +9,7 @@ Participant   = require "../models/Participant"
 router.route '/'
 
   .get (req, res, done) ->
-    # res.template = require '../templates/participants/list'
+    res.template = require '../templates/participants/list'
     Participant.find (error, participants) ->
       if error then req.next error
       res.serve {participants}
