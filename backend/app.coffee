@@ -23,6 +23,7 @@ Store    = require('connect-mongo') session
 app.use require('cookie-parser')()
 app.use require('body-parser').json()
 app.use require('body-parser').urlencoded()
+app.use require('method-override') (req, res) -> req.body._method
 app.use session
   cookie: maxAge: 24 * 60 * 60 * 1000
   secret: config.app.secret
