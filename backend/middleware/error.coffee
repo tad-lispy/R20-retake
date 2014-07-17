@@ -20,6 +20,6 @@ module.exports = (error, req, res, next) ->
 
   # Other kind of error.
   console.error "[!] Unhendeld error."
-  console.error error
-  res.serve 500, new Error2 "Internal Error", "There was an error. Go play."
+  console.trace error
+  res.serve 500, error: new Error2 "Internal Error", "There was an error. Go play.", code: 500
   # TODO: Shutdown worker

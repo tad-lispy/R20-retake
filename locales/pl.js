@@ -16,5 +16,11 @@
 	"Give us the facts, we will give you the law...": "Give us the facts, we will give you the law...",
 	"Ok": "Ok",
 	"About us": "About us",
-	"reader": "czytelnik"
+	"reader": "czytelnik",
+	"edit profile": "edit profile",
+	"Edit profile": "Edit profile",
+	"What can you tell us about %s?": "What can you tell us about %s?",
+	"Name": "Name",
+	"Come on, everybody has a name...": "Come on, everybody has a name...",
+	"That's it": "That's it"
 }
