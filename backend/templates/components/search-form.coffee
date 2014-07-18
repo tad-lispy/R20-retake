@@ -13,8 +13,8 @@ module.exports = new View (attributes) ->
           type        : "query"
           class       : "form-control"
           placeholder : @cede => @translate "What seems to be the problem?"
-          name        : "query"
-          value       : query
+          name        : "search"
+          value       : query.search
           data        :
             shortcut    : "/"
         @span class: "input-group-btn", =>
