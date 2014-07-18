@@ -38,7 +38,7 @@ module.exports = new View (options = {}) ->
             name        : "bio"
             class       : "form-control"
             placeholder : @cede => @translate "Few words about #{if user?.id is participant.id then 'you' else '%s'}", participant.name
-            value       : participant.bio
+            participant.bio
 
 
         @fieldset =>
