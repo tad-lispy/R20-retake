@@ -14,7 +14,7 @@ module.exports = new View (data) ->
   } = data
   data.subtitle = data.participant.name
 
-  can_edit = user.id is participant.id or user.can 'edit others profiles'
+  can_edit = user?.id is participant.id or user?.can 'edit others profiles'
 
   layout data, =>
 
@@ -32,18 +32,18 @@ module.exports = new View (data) ->
               @i class: "fa fa-fw fa-edit"
               @translate "edit profile"
 
-      if can_edit then @modal
-        title : @cede => @translate "Edit profile"
-        id    : "profile-edit-dialog"
-        =>
-          @p => @translate "What can you tell us about %s?", participant.name
-          @profileForm {
-            participant
-            user
-            csrf
-            method: 'PUT'
-            action: "/participants/#{participant.id}"
-          }
+    if can_edit then @modal
+      title : @cede => @translate "Edit profile"
+      id    : "profile-edit-dialog"
+      =>
+        @p => @translate "What can you tell us about %s?", participant.name
+        @profileForm {
+          participant
+          user
+          csrf
+          method: 'PUT'
+          action: "/participants/#{participant.id}"
+        }
 
           # @storyForm
           #   method  : "POST"

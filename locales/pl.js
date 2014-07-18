@@ -22,5 +22,15 @@
 	"What can you tell us about %s?": "What can you tell us about %s?",
 	"Name": "Name",
 	"Come on, everybody has a name...": "Come on, everybody has a name...",
-	"That's it": "That's it"
+	"That's it": "That's it",
+	"Come on, everybody has at least one name...": "Come on, everybody has at least one name...",
+	"Few words about you": "Few words about you",
+	"Feel like you belong to one of theese roles? Contact us to get invitation.": "Feel like you belong to one of theese roles? Contact us to get invitation.",
+	"student": "student",
+	"lawyer": "lawyer",
+	"editor": "editor",
+	"administrator": "administrator",
+	"Roles in Radzimy.co": "Roles in Radzimy.co",
+	"Feel like you belong to one of theese roles?": "Feel like you belong to one of theese roles?",
+	"Contact us to get invitation.": "Contact us to get invitation."
 }

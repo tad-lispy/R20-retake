@@ -22,7 +22,7 @@ router.param 'id', (req, res, done, id) ->
   Participant.findById id, (error, participant) ->
     if error then return done error
     # Hide emails
-    if req.user.id isnt participant.id then participant.email = undefined
+    if req.user?.id isnt participant.id then participant.email = undefined
     req.participant = participant
     do done
 
@@ -32,7 +32,7 @@ router.route '/:id'
     res.serve participant: req.participant
 
   .put (req, res) ->
-    unless req.user.id is req.participant.id or req.user.can 'edit others profiles'
+    unless req.user?.id is req.participant.id or req.user?.can 'edit others profiles'
       req.next Error2 "Forbidden", code: 403
 
     data = _.pick req.body, [
