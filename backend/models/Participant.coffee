@@ -54,7 +54,7 @@ for role, spec of config.get 'participants/roles'
 Participant.virtual('resolved_capabilities').get ->
   capabilities = @capabilities
   for name in @roles
-    capabilities = _.union capabilities, config.get "participants/roles/#{name}".can
+    capabilities = _.union capabilities, config.get "participants/roles/#{name}/can"
   return capabilities
 
 Participant.methods.can = (capability) ->
