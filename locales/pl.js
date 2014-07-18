@@ -32,5 +32,6 @@
 	"administrator": "administrator",
 	"Roles in Radzimy.co": "Roles in Radzimy.co",
 	"Feel like you belong to one of theese roles?": "Feel like you belong to one of theese roles?",
-	"Contact us to get invitation.": "Contact us to get invitation."
+	"Contact us to get invitation.": "Contact us to get invitation.",
+	"Few words about %s": "Few words about %s"
 }

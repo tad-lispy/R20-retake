@@ -17,14 +17,12 @@ passport.use new strategies.Persona
       if error then return done error
       if not participant then participant = new Participant {email}
 
-      if participant.email in config.participants.administrators or []
+      if participant.email in (config.participants.administrators or [])
         participant.roles.push 'administrator'
       else
-        _.remove participant.roles, (role) -> role is 'administrator'
+        participant.roles.remove 'administrator'
 
       participant.save done
-
-      done null, participant
 
 passport.serializeUser (user, done)    -> done null, user.email
 
