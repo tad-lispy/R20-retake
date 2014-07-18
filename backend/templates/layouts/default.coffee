@@ -35,7 +35,7 @@ module.exports = new View (options = {}, content) ->
         @link rel: "stylesheet", href: url for url in [
           "//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"
           "//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"
-          "/css/r20.css"
+          "/styles/R20.css"
         ]
 
       @body data: { csrf }, class: (classes.join " "), =>
