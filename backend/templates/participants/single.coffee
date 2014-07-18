@@ -2,6 +2,7 @@ View      = require "teacup-view"
 fs        = require "fs"
 _         = require "lodash"
 _.string  = require "underscore.string"
+config    = require "config-object"
 
 layout    = require "../layouts/default"
 
@@ -12,7 +13,8 @@ module.exports = new View (data) ->
     csrf
     user
   } = data
-  data.subtitle = data.participant.name
+  data.title = data.participant.name
+  data.subtitle = config.get 'site/title'
 
   can_edit = user?.id is participant.id or user?.can 'edit others profiles'
 
