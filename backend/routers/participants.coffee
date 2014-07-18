@@ -21,14 +21,14 @@ router.route '/'
 router.param 'id', (req, res, done, id) ->
   Participant.findById id, (error, participant) ->
     if error then return done error
-    # Hide emails
-    if req.user?.id isnt participant.id then participant.email = undefined
     req.participant = participant
     do done
 
 router.route '/:id'
   .get (req, res) ->
     res.template = require '../templates/participants/single'
+    # Hide emails
+    if req.user?.id isnt req.participant.id then req.participant.email = undefined
     res.serve participant: req.participant
 
   .put (req, res) ->
@@ -38,7 +38,7 @@ router.route '/:id'
     data = _.pick req.body, [
       'name'
       'bio'
-      'roles'
+      'roles' if req.user.can 'assign roles'
     ]
     req.participant.set data
     req.participant.save (error) ->
