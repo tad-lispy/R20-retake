@@ -7,35 +7,22 @@ Participant = require '../models/Participant'
 
 # Set up passport
 strategies  =
-  Local       : require('passport-local').Strategy
+  # Local       : require('passport-local').Strategy
   Persona     : require('passport-persona').Strategy
-
-# Disabled. Only persona authentication for now.
-# passport.use new strategies.Local
-#   usernameField: 'email'
-#   (email, password, done) ->
-#     { whitelist } = config.participants
-#     if not whitelist?.length then done new Error2 "No whitelist specified in configuration."
-#     data = _.find whitelist, (participant) ->
-#       participant.email is email and participant.password is password
-#
-#     if data then return done null, new Participant data
-#     done null, no, message: "Sorry, that didn't work."
-#
-#     # TODO: use real DB query
-#     # Participant.findOne {email, password}, (error, participant) ->
-#     #   if error then return done error
-#     #   if participant then return done null, participant
-#     #   done null, no, message: "Sorry, that didn't work."
 
 passport.use new strategies.Persona
   audience: config.auth.persona?.audience or "#{config.scheme}://#{config.host}:#{config.port}"
   (email, done) ->
     Participant.findOne {email}, (error, participant) ->
       if error then return done error
-      if not participant
-        participant = new Participant {email}
-        return participant.save done
+      if not participant then participant = new Participant {email}
+
+      if participant.email in config.participants.administrators or []
+        participant.roles.push 'administrator'
+      else
+        _.remove participant.roles, (role) -> role is 'administrator'
+
+      participant.save done
 
       done null, participant
 
