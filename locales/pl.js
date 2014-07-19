@@ -38,5 +38,11 @@
 	"Not published yet": "Not published yet",
 	"Versions": "Versions",
 	"author": "author",
-	"time": "time"
+	"time": "time",
+	"This is a draft proposed %s by %s.": "This is a draft proposed %s by %s.",
+	"See actual story": "See actual story",
+	"apply this draft": "apply this draft",
+	"make changes": "make changes",
+	"Edit story": "Edit story",
+	"Could it be told beter? Make changes if so.": "Could it be told beter? Make changes if so."
 }

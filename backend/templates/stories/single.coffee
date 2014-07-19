@@ -7,7 +7,7 @@ module.exports = new View (data) ->
   {
     story
     journal
-    draft
+    entry: draft # TODO: separate templates for drafts and other kind of journal entries
     csrf
     query
   } = data
@@ -116,7 +116,7 @@ module.exports = new View (data) ->
 
     if draft? or story.isNew
       @h4 class: "text-muted", =>
-        @i class: "fa fa-time fa-fw"
+        @i class: "fa fa-clock-o fa-fw"
         @translate "Versions"
       @draftsTable
         drafts  : journal.filter (entry) -> entry.action is "draft"

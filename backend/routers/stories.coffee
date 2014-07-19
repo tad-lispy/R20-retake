@@ -36,6 +36,7 @@ router.param 'story_id', (req, res, done, id) ->
     (done) -> Story.findByIdOrCreate id, done
 
     (story, done) -> story.findEntries action: 'draft', (error, journal) ->
+      # TODO: If story is new and no drafts then 404
       done error, story, journal
 
     (story, journal, done) -> Participant.populate journal,
@@ -50,7 +51,7 @@ router.param 'story_id', (req, res, done, id) ->
 
 router.param 'entry_id', (req, res, done, id) ->
   req.entry = _.find req.journal, (entry) -> entry.id is id
-  if not entry then return done new Error2
+  if not req.entry then return done new Error2
     code: 404
     name: "Not Found"
     message: "Journal entry not found."
@@ -92,6 +93,11 @@ router.route '/:story_id/journal'
 
 router.route '/:story_id/journal/:entry_id'
   .get (req, res) ->
-    res.serve 'Single journal entry. Can be a draft with apply form.'
+    res.template = require "../templates/stories/single"
+    res.serve _.pick req, [
+      'story'
+      'journal'
+      'entry'
+    ]
 
 module.exports = router
