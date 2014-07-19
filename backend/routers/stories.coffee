@@ -2,10 +2,12 @@ express = require 'express'
 router  = new express.Router
 _       = require "lodash"
 Error2  = require "error2"
-
+async   = require "async"
 
 approve = require "../middleware/approve-request"
-Story   = require "../models/Story"
+
+Story       = require "../models/Story"
+Participant = require "../models/Participant"
 
 # List's of stories operations
 router.route '/'
@@ -30,16 +32,31 @@ router.param 'story_id', (req, res, done, id) ->
     name: 'Unprocessable Entity'
     message: "#{_id} is not a valid story identifier. Check your url."
 
-  Story.findByIdOrCreate id, (error, story) ->
-    if error then return done error
-    req.story = story
-    done null
+  async.waterfall [
+    (done) -> Story.findByIdOrCreate id, done
+
+    (story, done) -> story.findEntries action: 'draft', (error, drafts) ->
+      done error, story, drafts
+
+    (story, drafts, done) -> Participant.populate drafts,
+      path: 'meta.author'
+      (error, drafts) ->
+        done error, story, drafts
+  ], (error, story, drafts) ->
+      if error then return done error
+      req.story = story
+      req.drafts = drafts
+      done null
+
 
 # Single story's operations
 router.route '/:story_id'
   .get (req, res) ->
-    {story} = req
-    res.serve { story }
+    {
+      story
+      drafts
+    } = req
+    res.serve { story, drafts }
   .put (req, res) ->
     res.serve 'Store a new draft for a story'
   .delete (req, res) ->
