@@ -44,5 +44,7 @@
 	"apply this draft": "apply this draft",
 	"make changes": "make changes",
 	"Edit story": "Edit story",
-	"Could it be told beter? Make changes if so.": "Could it be told beter? Make changes if so."
+	"Could it be told beter? Make changes if so.": "Could it be told beter? Make changes if so.",
+	"unknown author": "unknown author",
+	"apply this entry": "apply this entry"
 }

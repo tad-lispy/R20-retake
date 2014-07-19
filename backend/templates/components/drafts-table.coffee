@@ -24,7 +24,7 @@ module.exports = new View (options) ->
 
       url     = root + draft.data._id + "/journal/" + draft._id
       time    = @cede => @moment draft
-      author  = draft.meta.author
+      author  = draft.meta?.author
 
       @tr class: (if isChosen then "active" else if isApplied then "success"), =>
 

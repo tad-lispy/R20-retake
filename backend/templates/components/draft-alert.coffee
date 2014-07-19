@@ -11,14 +11,14 @@ module.exports = new View (options = {}) ->
 
   type ?= draft.model.toLowerCase()
 
-  author    = draft.meta.author
+  author    = draft.meta?.author
 
-  @div class: "alert alert-#{if applied then 'success' else 'info'} clearfix", =>      
+  @div class: "alert alert-#{if applied then 'success' else 'info'} clearfix", =>
     @translate "This is a draft proposed %s by %s.",
       @cede => @moment draft
       author?.name or @cede => @translate "unknown author"
 
-    if applied 
+    if applied
       @text " " + "It is currently applied."
 
     @a

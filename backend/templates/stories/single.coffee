@@ -7,13 +7,13 @@ module.exports = new View (data) ->
   {
     story
     journal
-    entry: draft # TODO: separate templates for drafts and other kind of journal entries
+    entry
     csrf
     query
   } = data
   data.classes  ?=                []
   data.classes.push               "story"
-  if draft then data.classes.push "draft"
+  if entry then data.classes.push "draft"
 
 
   data.subtitle = @cede => @translate "The case of %s", moment(story._id.getTimestamp()).format 'LL'
@@ -23,18 +23,18 @@ module.exports = new View (data) ->
     data.scripts.push "//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.45/jquery.form.min.js"
 
 
-    if draft?
-      applied  = Boolean story._draft?.equals draft._id
+    if entry?
+      applied  = Boolean story._draft?.equals entry._id
 
       @draftAlert
         applied   : applied
-        draft     : draft
+        draft     : entry
         actualurl : "/stories/#{story._id}"
 
     # The story
     @div class: "jumbotron", =>
-      if draft
-        @markdown draft.data.text
+      if entry
+        @markdown entry.data.text
 
         @form
           action: "/stories/#{story._id}/"
@@ -43,7 +43,7 @@ module.exports = new View (data) ->
           =>
             @input type: "hidden", name: "_method"  , value: "PUT"
             @input type: "hidden", name: "_csrf"    , value: csrf
-            @input type: "hidden", name: "_draft"   , value: draft._id
+            @input type: "hidden", name: "_draft"   , value: entry._id
 
             @div class: "btn-group pull-right", =>
               @button
@@ -53,7 +53,7 @@ module.exports = new View (data) ->
                 data    : shortcut: "a a enter"
                 =>
                   @i class: "fa fa-fw fa-check-square"
-                  @translate "apply this draft"
+                  @translate "apply this entry"
 
               @dropdown items: [
                 title : @cede => @translate "make changes"
@@ -85,12 +85,12 @@ module.exports = new View (data) ->
               @translate "make changes"
 
           @dropdown items: [
-            title : @cede => @translate "show drafts"
-            href  : "#show-drafts"
+            title : @cede => @translate "show entrys"
+            href  : "#show-entrys"
             icon  : "folder"
             data  :
               toggle  : "modal"
-              target  : "#drafts-dialog"
+              target  : "#entrys-dialog"
               shortcut: "d"
           ,
             title : @cede => @translate "remove story"
@@ -102,7 +102,7 @@ module.exports = new View (data) ->
               shortcut: "del enter"
           ]
 
-    unless story.isNew and not draft?
+    unless story.isNew and not entry?
       @modal
         title : @cede => @translate "Edit story"
         id    : "story-edit-dialog"
@@ -110,18 +110,18 @@ module.exports = new View (data) ->
           @p => @translate "Could it be told beter? Make changes if so."
           @storyForm
             method  : "POST"
-            action  : "/stories/#{story._id}/drafts"
-            story   : draft?.data or story
+            action  : "/stories/#{story._id}"
+            story   : entry?.data or story
             csrf    : csrf
 
-    if draft? or story.isNew
+    if entry? or story.isNew
       @h4 class: "text-muted", =>
         @i class: "fa fa-clock-o fa-fw"
         @translate "Versions"
       @draftsTable
         drafts  : journal.filter (entry) -> entry.action is "draft"
         applied : story?._draft
-        chosen  : draft?._id
+        chosen  : entry?._id
         root    : "/stories/"
 
     else
@@ -132,7 +132,7 @@ module.exports = new View (data) ->
           @draftsTable
             drafts  : journal.filter (entry) -> entry.action is "draft"
             applied : story?._draft
-            chosen  : draft?._id
+            chosen  : entry?._id
             root    : "/stories/"
 
       @modal

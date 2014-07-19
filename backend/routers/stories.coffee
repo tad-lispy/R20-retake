@@ -66,8 +66,16 @@ router.route '/:story_id'
       journal
     } = req
     res.serve { story, journal }
-  .put (req, res) ->
-    res.serve 'Store a new draft for a story'
+  .post (req, res) ->
+    data = _.pick req.body, [
+      'text'
+    ]
+    { story } = req
+    story.set data
+    story.saveDraft author: req.user.id, (error, draft) ->
+      if error then return done error
+      res.redirect "/stories/#{story.id}/journal/#{draft.id}"
+
   .delete (req, res) ->
     res.serve 'Remove a story, but leave journal'
 
@@ -94,10 +102,11 @@ router.route '/:story_id/journal'
 router.route '/:story_id/journal/:entry_id'
   .get (req, res) ->
     res.template = require "../templates/stories/single"
-    res.serve _.pick req, [
+    data = _.pick req, [
       'story'
       'journal'
       'entry'
     ]
+    res.serve data
 
 module.exports = router
