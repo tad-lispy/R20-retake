@@ -14,13 +14,13 @@ router.route '/'
       if error then req.next error
       res.serve {stories}
 
-  .post approve('post stories'), (req, res) ->
+  .post approve('tell a story'), (req, res) ->
     data = _.pick req.body, ['text']
     story = new Story data
     # TODO: Why error?
-    # story.saveDraft author: req.user.id, ->
-    #   res.redirect '/stories/' + story.id
-    res.serve {story}
+    story.saveDraft author: req.user.id, (error, draft)->
+      res.redirect "/stories/#{story.id}/drafts/#{draft.id}"
+    # res.serve {story}
 
 # Single story's operations
 router.route '/:story_id'

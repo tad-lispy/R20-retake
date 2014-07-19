@@ -19,7 +19,7 @@ participants:
   roles:
     reader:
       can   : [
-        'post stories'
+        'tell a story'
       ]
     student:
       as     : 'reader'

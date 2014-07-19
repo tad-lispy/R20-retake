@@ -36,7 +36,7 @@ module.exports = new View (data) ->
               =>
                 @i class: "fa fa-fw fa-search"
                 @text "Search"
-            if user?.can 'post stories' then @dropdown items: [
+            if user?.can 'tell a story' then @dropdown items: [
               title : @cede => @translate "new story"
               icon  : "plus-circle"
               data  :
@@ -63,7 +63,7 @@ module.exports = new View (data) ->
 
     else @div class: "alert alert-info", => @translate "Nothing like that found. Sorry :P"
 
-    if user?.can 'post stories' then @modal
+    if user?.can 'tell a story' then @modal
       title : @cede => @translate "New story"
       id    : "story-new-dialog"
       =>
