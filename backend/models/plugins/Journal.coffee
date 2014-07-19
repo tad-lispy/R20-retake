@@ -26,7 +26,6 @@ deepOmit = (object, omit) ->
 
 
 plugin = (schema, options = {}) ->
-
   options = _.defaults options,
     omit  : {}
 
@@ -56,114 +55,110 @@ plugin = (schema, options = {}) ->
       reference = { path, relation, model }
       schema.statics.references[path] = reference
 
+  schema.methods.saveDraft = (meta, callback) ->
+    if not callback and typeof meta is "function" then callback = meta
+
+    draft = do @.toObject
+    model = @constructor.modelName
 
 
-  schema.methods = _(schema.methods).extend
+    # Don't store references and such.
+    draft = deepOmit draft, options.omit
 
-    saveDraft: (meta, callback) ->
-      if not callback and typeof meta is "function" then callback = meta
+    entry = new Entry
+      action: "draft"
+      model : model
+      data  : draft
+      meta  : meta
 
-      draft = do @.toObject
-      model = @constructor.modelName
+    entry.save (error) ->
+      callback error, entry
+
+  schema.methods.saveReference = (path, document, meta, callback) ->
+    if not callback and typeof meta is "function"
+      callback  = meta
+      meta      = {}
+
+    reference = @constructor.references[path]
+    ref_model = document.constructor
+    if ref_model.modelName isnt reference.model
+      return callback Error "Reference model doesn't match document"
+
+    entry = new Entry
+      action: "reference"
+      model : @constructor.modelName
+      data  :
+        reference : reference
+        main      : @_id
+        referenced: document._id
+      meta  : meta
+
+    entry.save (error) ->
+      if error then return callback error
+      callback null, entry
+
+  schema.methods.removeReference = (path, document, meta, callback) ->
+    if not callback and typeof meta is "function"
+      callback  = meta
+      meta      = {}
+
+    reference = @constructor.references[path]
+
+    entry = new Entry
+      action: "unreference"
+      model : @constructor.modelName
+      data  :
+        reference : reference
+        main      : @_id
+        referenced: document
+      meta  : meta
+
+    entry.save (error) ->
+      if error then return callback error
+      callback null, entry
 
 
-      # Don't store references and such.
-      draft = deepOmit draft, options.omit
+  schema.methods.removeDocument = (meta, callback) ->
+    # Remove document from collection while preserving all drafts.
+    # Snapshot of the document will be stored in a journal.
 
-      entry = new Entry
-        action: "draft"
-        model : model
-        data  : draft
-        meta  : meta
+    entry = new Entry
+      action: "remove"
+      model : @constructor.modelName
+      data  : do @toObject
+      meta  : meta
 
-      entry.save (error) ->
-        callback error, entry
+    entry.save (error) =>
+      if error then return callback error
 
-    saveReference: (path, document, meta, callback) ->
-      if not callback and typeof meta is "function"
-        callback  = meta
-        meta      = {}
+      @remove (error) ->
+        if error then return entry.remove (entry_error) ->
+          if entry_error then throw entry_error # Shit!
+          return callback error
 
-      reference = @constructor.references[path]
-      ref_model = document.constructor
-      if ref_model.modelName isnt reference.model
-        return callback Error "Reference model doesn't match document"
-
-      entry = new Entry
-        action: "reference"
-        model : @constructor.modelName
-        data  :
-          reference : reference
-          main      : @_id
-          referenced: document._id
-        meta  : meta
-
-      entry.save (error) ->
-        if error then return callback error
         callback null, entry
 
-    removeReference: (path, document, meta, callback) ->
-      if not callback and typeof meta is "function"
-        callback  = meta
-        meta      = {}
+  # TODO: Is it used anywhere in the project?
+  # Or is it some forgotten idea?
+  schema.methods.findEntries = (conditions, callback) ->
+    if not callback and typeof conditions is "function"
+      callback    = conditions
+      conditions  = {}
 
-      reference = @constructor.references[path]
+    _(conditions).extend conditions,
+      model     : @constructor.modelName
+      "data._id": @_id
 
-      entry = new Entry
-        action: "unreference"
-        model : @constructor.modelName
-        data  :
-          reference : reference
-          main      : @_id
-          referenced: document
-        meta  : meta
+    query = Entry
+      .find(conditions)
+      .sort(_id: -1)
 
-      entry.save (error) ->
-        if error then return callback error
-        callback null, entry
+    { populate } = options
+    if populate?
+      if typeof populate isnt "array" then populate = [ populate ]
+      for spec in populate
+        query.populate spec
 
-
-    removeDocument: (meta, callback) ->
-      # Remove document from collection while preserving all drafts.
-      # Snapshot of the document will be stored in a journal.
-
-      entry = new Entry
-        action: "remove"
-        model : @constructor.modelName
-        data  : do @toObject
-        meta  : meta
-
-      entry.save (error) =>
-        if error then return callback error
-
-        @remove (error) ->
-          if error then return entry.remove (entry_error) ->
-            if entry_error then throw entry_error # Shit!
-            return callback error
-
-          callback null, entry
-
-    # TODO: Is it used anywhere in the project?
-    # Or is it some forgotten idea?
-    findEntries: (conditions, callback) ->
-      if not callback and typeof conditions is "function"
-        callback    = conditions
-        conditions  = {}
-
-      _(conditions).extend conditions,
-        model     : @constructor.modelName
-        "data._id": @_id
-
-      query = Entry
-        .find(conditions)
-        .sort(_id: -1)
-
-      { populate } = options
-      if populate?
-        if typeof populate isnt "array" then populate = [ populate ]
-        for spec in populate
-          query.populate spec
-
-      query.exec callback
+    query.exec callback
 
 module.exports = plugin
