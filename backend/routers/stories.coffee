@@ -35,32 +35,40 @@ router.param 'story_id', (req, res, done, id) ->
   async.waterfall [
     (done) -> Story.findByIdOrCreate id, done
 
-    (story, done) -> story.findEntries action: 'draft', (error, drafts) ->
-      done error, story, drafts
+    (story, done) -> story.findEntries action: 'draft', (error, journal) ->
+      done error, story, journal
 
-    (story, drafts, done) -> Participant.populate drafts,
+    (story, journal, done) -> Participant.populate journal,
       path: 'meta.author'
-      (error, drafts) ->
-        done error, story, drafts
-  ], (error, story, drafts) ->
+      (error, journal) ->
+        done error, story, journal
+  ], (error, story, journal) ->
       if error then return done error
       req.story = story
-      req.drafts = drafts
+      req.journal = journal
       done null
 
+router.param 'entry_id', (req, res, done, id) ->
+  req.entry = _.find req.journal, (entry) -> entry.id is id
+  if not entry then return done new Error2
+    code: 404
+    name: "Not Found"
+    message: "Journal entry not found."
+  do done
 
 # Single story's operations
 router.route '/:story_id'
   .get (req, res) ->
+    res.template = require "../templates/stories/single"
     {
       story
-      drafts
+      journal
     } = req
-    res.serve { story, drafts }
+    res.serve { story, journal }
   .put (req, res) ->
     res.serve 'Store a new draft for a story'
   .delete (req, res) ->
-    res.serve 'Remove a story, but leave jou rnal'
+    res.serve 'Remove a story, but leave journal'
 
 # Questions' operations
 router.route '/:story_id/questions'

@@ -2,16 +2,14 @@ View      = require "teacup-view"
 layout    = require "../layouts/default"
 
 moment    = require "moment"
-debug     = require "debug"
-$         = debug "R20:views:story"
 
 module.exports = new View (data) ->
   {
     story
+    journal
     draft
     csrf
     query
-    journal
   } = data
   data.classes  ?=                []
   data.classes.push               "story"
@@ -19,7 +17,7 @@ module.exports = new View (data) ->
 
 
   data.subtitle = @cede => @translate "The case of %s", moment(story._id.getTimestamp()).format 'LL'
-  
+
   layout data, =>
     data.scripts.push "/js/assign-question.js"
     data.scripts.push "//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.45/jquery.form.min.js"
@@ -27,7 +25,7 @@ module.exports = new View (data) ->
 
     if draft?
       applied  = Boolean story._draft?.equals draft._id
-      
+
       @draftAlert
         applied   : applied
         draft     : draft
@@ -46,7 +44,7 @@ module.exports = new View (data) ->
             @input type: "hidden", name: "_method"  , value: "PUT"
             @input type: "hidden", name: "_csrf"    , value: csrf
             @input type: "hidden", name: "_draft"   , value: draft._id
-            
+
             @div class: "btn-group pull-right", =>
               @button
                 class   : "btn btn-success"
@@ -67,12 +65,12 @@ module.exports = new View (data) ->
                   shortcut: "e"
               ]
 
-      else if story.isNew 
+      else if story.isNew
         @p class: "text-muted", =>
           @i class: "fa fa-fw fa-info-circle"
           @translate "Not published yet"
 
-      else 
+      else
         @markdown story.text
 
         @div class: "clearfix", => @div class: "btn-group pull-right", =>
@@ -105,7 +103,7 @@ module.exports = new View (data) ->
           ]
 
     unless story.isNew and not draft?
-      @modal 
+      @modal
         title : @cede => @translate "Edit story"
         id    : "story-edit-dialog"
         =>
@@ -118,26 +116,26 @@ module.exports = new View (data) ->
 
     if draft? or story.isNew
       @h4 class: "text-muted", =>
-        @i class: "fa fa-timev fa-fw"
+        @i class: "fa fa-time fa-fw"
         @translate "Versions"
       @draftsTable
-        drafts  : journal.filter (entry) -> entry.action is "draft" 
+        drafts  : journal.filter (entry) -> entry.action is "draft"
         applied : story?._draft
         chosen  : draft?._id
         root    : "/stories/"
-    
+
     else
-      @modal 
+      @modal
         title : @cede => @translate "Drafts of this story"
         id    : "drafts-dialog"
         =>
           @draftsTable
-            drafts  : journal.filter (entry) -> entry.action is "draft" 
+            drafts  : journal.filter (entry) -> entry.action is "draft"
             applied : story?._draft
             chosen  : draft?._id
             root    : "/stories/"
 
-      @modal 
+      @modal
         title : @cede => @translate "Remove this story?"
         id    : "remove-dialog"
         class : "modal-danger"
@@ -147,10 +145,10 @@ module.exports = new View (data) ->
             =>
               @input type: "hidden", name: "_csrf"   , value: csrf
               @input type: "hidden", name: "_method" , value: "DELETE"
-                              
+
               @div class: "well", =>
                 @markdown story.text
-              
+
               @p => @translate "Removing a story is roughly equivalent to unpublishing it. It can be undone. All drafts will be preserved."
 
               @div class: "form-group", =>
@@ -180,7 +178,7 @@ module.exports = new View (data) ->
                 @i class: "fa fa-fw fa-link"
                 @translate "assign"
 
-        @div 
+        @div
           class : "panel-body collapse"
           id    : "assignment-list"
           =>
@@ -219,13 +217,13 @@ module.exports = new View (data) ->
                         @input
                           type  : "hidden"
                           name  : "_id"
-                        
+
                         @input
                           type  : "hidden"
                           name  : "_csrf"
                           value : csrf
-                        
-                        
+
+
                         @button
                           type    : "submit"
                           class   : "btn btn-block"
@@ -258,20 +256,20 @@ module.exports = new View (data) ->
                 @h4
                   class: "list-group-item-heading"
                   question.text
-                
+
                 if question.answers.length then @p =>
                   @translate "Answers by: "
                   for answer in question.answers
                     @text answer.author?.name or @cede => @translate "unknown author"
                     @text " "
                 else @p class: "text-muted", => @translate "No answers yet"
-                  
+
                 @div class: "btn-group", =>
                   @form
                     action: "/stories/#{story._id}/questions/#{question._id}"
                     method: "post"
                     =>
-                      @input 
+                      @input
                         type  : "hidden"
                         name  : "_csrf"
                         value : csrf

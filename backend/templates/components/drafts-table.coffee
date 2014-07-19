@@ -22,7 +22,7 @@ module.exports = new View (options) ->
       else if isApplied then  icon = "check"
       else                    icon = "circle-o"
 
-      url     = root + draft.data._id + "/drafts/" + draft._id
+      url     = root + draft.data._id + "/journal/" + draft._id
       time    = @cede => @moment draft
       author  = draft.meta.author
 
