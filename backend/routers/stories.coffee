@@ -1,6 +1,8 @@
 express = require 'express'
 router  = new express.Router
 _       = require "lodash"
+Error2  = require "error2"
+
 
 approve = require "../middleware/approve-request"
 Story   = require "../models/Story"
@@ -22,10 +24,22 @@ router.route '/'
       res.redirect "/stories/#{story.id}/drafts/#{draft.id}"
     # res.serve {story}
 
+router.param 'story_id', (req, res, done, id) ->
+  if not /^[0-9a-fA-F]{24}$/.test id then return done new Error2
+    code: 422
+    name: 'Unprocessable Entity'
+    message: "#{_id} is not a valid story identifier. Check your url."
+
+  Story.findByIdOrCreate id, (error, story) ->
+    if error then return done error
+    req.story = story
+    done null
+
 # Single story's operations
 router.route '/:story_id'
   .get (req, res) ->
-    res.serve 'A single story'
+    {story} = req
+    res.serve { story }
   .put (req, res) ->
     res.serve 'Store a new draft for a story'
   .delete (req, res) ->
