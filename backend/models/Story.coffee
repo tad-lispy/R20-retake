@@ -31,5 +31,7 @@ Story.plugin (require "./plugins/Journal"),
     model : "Question"
   ]
 
+Story.plugin require('./plugins/Search'),
+  collection: 'stories'
 
 module.exports = mongoose.model 'Story', Story

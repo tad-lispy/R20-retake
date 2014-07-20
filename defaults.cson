@@ -12,6 +12,10 @@ site  :
 mongo :
   url   : "mongodb://localhost/r20"
 
+elasticsearch:
+  host  : 'localhost:9200',
+  log   : 'trace'
+
 auth  :
   fake  : no
 
