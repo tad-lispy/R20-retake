@@ -46,5 +46,7 @@
 	"Edit story": "Edit story",
 	"Could it be told beter? Make changes if so.": "Could it be told beter? Make changes if so.",
 	"unknown author": "unknown author",
-	"apply this entry": "apply this entry"
+	"apply this entry": "apply this entry",
+	"Unpublished stories": "Unpublished stories",
+	"There are drafts for those stories, but none of them is published": "There are drafts for those stories, but none of them is published"
 }
