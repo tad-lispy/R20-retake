@@ -96,9 +96,7 @@ router.route '/:story_id/questions/:question_id'
     res.serve 'Remove a story-question link'
 
 # Journal operations
-router.route '/:story_id/apply'
-  .post (req, res) ->
-    res.serve 'Apply a draft or another a journal operation'
+# TODO: own router?
 
 router.route '/:story_id/journal'
   .get (req, res) ->
@@ -113,5 +111,10 @@ router.route '/:story_id/journal/:entry_id'
       'entry'
     ]
     res.serve data
+
+router.route '/:story_id/journal/:entry_id/apply'
+  .post approve('publish a story'), (req, res) ->
+    req.entry.apply author: req.user.id, (error, story) ->
+      res.redirect "/stories/#{story.id}"
 
 module.exports = router

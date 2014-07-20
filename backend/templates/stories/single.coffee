@@ -37,11 +37,10 @@ module.exports = new View (data) ->
         @markdown entry.data.text
 
         @form
-          action: "/stories/#{story._id}/"
+          action: "/stories/#{story.id}/journal/#{entry.id}/apply"
           method: "POST"
           class : "clearfix"
           =>
-            @input type: "hidden", name: "_method"  , value: "PUT"
             @input type: "hidden", name: "_csrf"    , value: csrf
             @input type: "hidden", name: "_draft"   , value: entry._id
 
@@ -53,7 +52,7 @@ module.exports = new View (data) ->
                 data    : shortcut: "a a enter"
                 =>
                   @i class: "fa fa-fw fa-check-square"
-                  @translate "apply this entry"
+                  @translate "apply this draft"
 
               @dropdown items: [
                 title : @cede => @translate "make changes"
@@ -85,12 +84,12 @@ module.exports = new View (data) ->
               @translate "make changes"
 
           @dropdown items: [
-            title : @cede => @translate "show entrys"
-            href  : "#show-entrys"
+            title : @cede => @translate "show drafts"
+            href  : "#show-drafts"
             icon  : "folder"
             data  :
               toggle  : "modal"
-              target  : "#entrys-dialog"
+              target  : "#drafts-dialog"
               shortcut: "d"
           ,
             title : @cede => @translate "remove story"
