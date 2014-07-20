@@ -10,6 +10,7 @@ Story = new mongoose.Schema
   questions : [
     type      : mongoose.Schema.ObjectId
     ref       : 'Question'
+    index     : yes
   ]
 
 Story.pre "validate", (done) ->
@@ -29,5 +30,6 @@ Story.plugin (require "./plugins/Journal"),
     path  : "data.referenced_doc"
     model : "Question"
   ]
+
 
 module.exports = mongoose.model 'Story', Story

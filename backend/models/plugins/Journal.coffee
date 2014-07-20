@@ -74,6 +74,37 @@ plugin = (schema, options = {}) ->
     entry.save (error) ->
       callback error, entry
 
+  schema.static 'findUnpublished', (query, callback) ->
+    # Find all documents that have drafts, but are not stored (i.e. published)
+    if not callback and typeof query is 'function' then [callback, query] = [query, {}]
+
+    output = 'journal.unpublished.' + @collection.name # Output collection name
+
+    async.waterfall [
+      (done) => Entry.count done
+      (count, done) =>
+        if count then Entry.mapReduce
+          map: -> emit @data._id, 0
+          reduce: (id, published) -> Array.sum published
+          out: reduce: output
+          done
+        else do done
+
+      (result, stats, done) => @count done
+      (count, done) =>
+        if count then @mapReduce
+          map: -> emit @_id, 1
+          reduce: (id, published) -> Array.sum published
+          out: reduce: output
+          done
+        else done null, undefined, 'collection doesnt exist'
+
+      (result, stats, done) =>
+        mongoose.connection.db.collection output, done
+      (collection, done) => collection.find(value: 0).toArray(done)
+    ], callback
+
+
   schema.methods.saveReference = (path, document, meta, callback) ->
     if not callback and typeof meta is "function"
       callback  = meta

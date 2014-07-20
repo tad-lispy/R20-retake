@@ -12,19 +12,24 @@ Participant = require "../models/Participant"
 # List's of stories operations
 router.route '/'
 
-  .get (req, res, done) ->
+  .get (req, res) ->
     res.template = require '../templates/stories/list'
-    Story.find (error, stories) ->
-      if error then req.next error
-      res.serve {stories}
+    async.parallel
+      stories:     (done) -> Story.find done
+      unpublished: (done) -> Story.findUnpublished done
+      (error, data) ->
+        if error then return req.next error
+        res.serve data
+    # Story.find (error, stories) ->
+    #   if error then req.next error
+    #   res.serve {stories}
 
   .post approve('tell a story'), (req, res) ->
     data = _.pick req.body, ['text']
     story = new Story data
-    # TODO: Why error?
     story.saveDraft author: req.user.id, (error, draft)->
+      if error then return done error
       res.redirect "/stories/#{story.id}/drafts/#{draft.id}"
-    # res.serve {story}
 
 router.param 'story_id', (req, res, done, id) ->
   if not /^[0-9a-fA-F]{24}$/.test id then return done new Error2
