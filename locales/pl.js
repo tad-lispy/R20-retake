@@ -67,5 +67,14 @@
 	"Question text:": "Question text:",
 	"Enter the text of a question...": "Enter the text of a question...",
 	"ok": "ok",
-	"show drafts": "show drafts"
+	"show drafts": "show drafts",
+	"Legal questions of interest": "Legal questions of interest",
+	"Type to search or create new...": "Type to search or create new...",
+	"new question": "new question",
+	"New question": "New question",
+	"No questions like that found. Sorry :P": "No questions like that found. Sorry :P",
+	"Type to search or questions...": "Type to search or questions...",
+	"Unpublished questions": "Unpublished questions",
+	"There are drafts for those questions, but none of them is published": "There are drafts for those questions, but none of them is published",
+	"The question of %s": "The question of %s"
 }

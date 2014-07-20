@@ -6,7 +6,7 @@ Story     = require "./Story"
 Answer    = require "./Answer"
 
 Question  = new mongoose.Schema
-  text      : 
+  text      :
     type      : String
     required  : yes
     unique    : yes
@@ -29,7 +29,7 @@ Question.methods.findAnswers = (conditions, callback) ->
 
   Answer.find conditions, callback
 
-Question.plugin (require "./Journal"),
+Question.plugin (require "./plugins/Journal"),
   populate:
     path  : "meta.author"
     model : "Participant"

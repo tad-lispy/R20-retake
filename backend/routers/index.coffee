@@ -14,10 +14,9 @@ router.use "/#{route}", require "./#{route}" for route in [
   'authenticate'
   'participants'
   'stories'
+  'questions'
   # TODO:
-  # 'questions'
   # 'answers'
-  # 'participants'
 ]
 
 module.exports = router

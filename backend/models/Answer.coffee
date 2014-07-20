@@ -16,6 +16,6 @@ answer      = new mongoose.Schema
     ref         : 'Question'
     required    : yes
 
-answer.plugin (require "./Journal")
+answer.plugin (require "./plugins/Journal")
 
 module.exports = mongoose.model "Answer", answer
