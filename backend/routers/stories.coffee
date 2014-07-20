@@ -14,6 +14,11 @@ router.route '/'
 
   .get (req, res) ->
     res.template = require '../templates/stories/list'
+    if req.query.search
+      Story.search req.query.search, (error, result) ->
+        if error then return done error
+        return res.serve result
+
     async.parallel
       stories:     (done) -> Story.find done
       unpublished: (done) -> Story.findUnpublished done
@@ -29,7 +34,7 @@ router.route '/'
     story = new Story data
     story.saveDraft author: req.user.id, (error, draft)->
       if error then return done error
-      res.redirect "/stories/#{story.id}/drafts/#{draft.id}"
+      res.redirect "/stories/#{story.id}/journal/#{draft.id}"
 
 router.param 'story_id', (req, res, done, id) ->
   if not /^[0-9a-fA-F]{24}$/.test id then return done new Error2
