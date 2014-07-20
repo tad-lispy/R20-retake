@@ -28,27 +28,32 @@ router.route '/'
       if error then return done error
       res.redirect "/questions/#{question.id}/drafts/#{draft.id}"
 
-router.param 'story_id', (req, res, done, id) ->
+router.param 'id', (req, res, done, id) ->
   if not /^[0-9a-fA-F]{24}$/.test id then return done new Error2
     code: 422
     name: 'Unprocessable Entity'
-    message: "#{_id} is not a valid story identifier. Check your url."
+    message: "#{id} is not a valid question identifier. Check your url."
 
   async.waterfall [
-    (done) -> Story.findByIdOrCreate id, done
+    (done) -> Question.findByIdOrCreate id, done
 
-    (story, done) -> story.findEntries action: 'draft', (error, journal) ->
-      # TODO: If story is new and no drafts then 404
-      done error, story, journal
+    (question, done) -> question.findEntries action: 'draft', (error, journal) ->
+      done error, question, journal
 
-    (story, journal, done) -> Participant.populate journal,
-      path: 'meta.author'
-      (error, journal) ->
-        done error, story, journal
-  ], (error, story, journal) ->
+    (question, journal, done) ->
+      if question.isNew and not journal.length then return done new Error2
+        code   : 404
+        name   : "Question not found"
+        message: "There is no question at this address."
+
+      Participant.populate journal,
+        path: 'meta.author'
+        (error, journal) ->
+          done error, question, journal
+  ], (error, question, journal) ->
       if error then return done error
-      req.story = story
-      req.journal = journal
+      req.question = question
+      req.journal  = journal
       done null
 
 router.param 'entry_id', (req, res, done, id) ->
@@ -60,14 +65,17 @@ router.param 'entry_id', (req, res, done, id) ->
   do done
 
 # Single story's operations
-router.route '/:story_id'
+router.route '/:id'
   .get (req, res) ->
-    res.template = require "../templates/stories/single"
+    res.template = require "../templates/questions/single"
     {
-      story
+      question
       journal
     } = req
-    res.serve { story, journal }
+    res.serve _.pick req, [
+      'question'
+      'journal'
+    ]
   .post (req, res) ->
     data = _.pick req.body, [
       'text'

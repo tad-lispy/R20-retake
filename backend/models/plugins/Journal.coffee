@@ -172,8 +172,6 @@ plugin = (schema, options = {}) ->
 
         callback null, entry
 
-  # TODO: Is it used anywhere in the project?
-  # Or is it some forgotten idea?
   schema.methods.findEntries = (conditions, callback) ->
     if not callback and typeof conditions is "function"
       callback    = conditions

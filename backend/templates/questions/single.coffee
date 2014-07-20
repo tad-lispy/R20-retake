@@ -3,8 +3,6 @@ layout    = require "../layouts/default"
 
 moment    = require "moment"
 _         = require "lodash"
-debug     = require "debug"
-$         = debug "R20:views:question"
 
 module.exports = new View (data) ->
   {
@@ -21,7 +19,7 @@ module.exports = new View (data) ->
   data.classes.push "question"
   if draft then data.classes.push "draft"
 
-  
+
   # TODO: if used as subtitle it shows twice on the page (as subtitle and in jumbotron)
   # subtitle =  if draft? then draft.text else
   #             if not question.isNew then question.text
@@ -49,7 +47,7 @@ module.exports = new View (data) ->
             @input type: "hidden", name: "_method", value: "PUT"
             @input type: "hidden", name: "_csrf"  , value: data.csrf
             @input type: "hidden", name: "_draft" , value: draft._id
-            
+
             @div class: "btn-group pull-right", =>
               @button
                 class   : "btn btn-success"
@@ -70,12 +68,12 @@ module.exports = new View (data) ->
                   shortcut: "e"
               ]
 
-      else if question.isNew 
+      else if question.isNew
         @p class: "text-muted", =>
           @i class: "fa fa-info-circle fa-fw"
           @translate "Not published yet."
 
-      else 
+      else
         @strong question.text
 
         @div class: "clearfix", => @div class: "btn-group pull-right", =>
@@ -116,9 +114,9 @@ module.exports = new View (data) ->
               target  : "#remove-dialog"
               shortcut: "del enter"
           ]
-        
+
     unless question.isNew and not draft?
-      @modal 
+      @modal
         title : @cede => @translate "Edit this question"
         id    : "question-edit-dialog"
         => @questionForm
@@ -132,13 +130,13 @@ module.exports = new View (data) ->
         @i class: "fa  fa-fw fa-time"
         @translate "Versions"
       @draftsTable
-        drafts  : journal.filter (entry) -> entry.action is "draft" 
+        drafts  : journal.filter (entry) -> entry.action is "draft"
         applied : question?._draft
         chosen  : draft?._id
         root    : "/questions/"
 
     else
-      @modal 
+      @modal
         title : @cede => @translate "Remove this question?"
         id    : "remove-dialog"
         class : "modal-danger"
@@ -148,10 +146,10 @@ module.exports = new View (data) ->
             =>
               @input type: "hidden", name: "_csrf"   , value: csrf
               @input type: "hidden", name: "_method" , value: "DELETE"
-                              
+
               @div class: "well", =>
                 @markdown question.text
-              
+
               @p => @translate "Removing a question is roughly equivalent to unpublishing it. It can be undone. All drafts will be preserved."
 
               @div class: "form-group", =>
@@ -164,12 +162,12 @@ module.exports = new View (data) ->
 
       # Drafts modal is used in published question view only.
       # In other views (drafts or unpublished) drafts table is below text.
-      @modal 
+      @modal
         title : @cede => @translate "Drafts of this question"
         id    : "drafts-dialog"
         =>
           @draftsTable
-            drafts  : journal.filter (entry) -> entry.action is "draft" 
+            drafts  : journal.filter (entry) -> entry.action is "draft"
             applied : question?._draft
             chosen  : draft?._id
             root    : "/questions/"
@@ -188,13 +186,13 @@ module.exports = new View (data) ->
               href  : "/questions/#{question._id}/answers/#{answer._id}"
               class: "btn btn-xs pull-right"
               => @i class: "fa fa-expand"
-              
+
           @div class: "panel-body clearfix", =>
-            
+
             @markdown answer.text
-            
+
           # TODO: use client side js to deal with modals and forms
-          @modal 
+          @modal
             title : @cede => @translate "Edit answer by %s",
               answer.author?.name or @cede => @translate "unknown author"
             id    : "answer-#{answer._id}-edit-dialog"
@@ -204,7 +202,7 @@ module.exports = new View (data) ->
               csrf    : csrf
               answer  : answer
 
-      
+
       else @div class: "alert alert-info", =>
         @p =>
           @i class: "fa fa-fw fa-frown-o"
@@ -228,13 +226,13 @@ module.exports = new View (data) ->
           =>
             @div class: "form-group", =>
               @label for: "text", => @translate "Have an answer? Please share it!"
-              @textarea 
+              @textarea
                 class       : "form-control"
                 name        : "text"
                 placeholder : @cede => @translate "Your answer..."
                 data        :
                   shortcut    : "a"
-                  
+
             @div class: "form-group", =>
               @button
                 type  : "submit"
@@ -249,14 +247,14 @@ module.exports = new View (data) ->
       id    : "stories-dialog"
       =>
         @div class: "modal-body", =>
-          @div 
+          @div
             id      : "stories-carousel"
             class   : "carousel slide"
             data    :
               ride    : "carousel"
               interval: "false"
             =>
-              @div class: "carousel-inner", => 
+              @div class: "carousel-inner", =>
                 for story, n in stories
                   @div class: "item #{if n is 0 then 'active' else ''}", =>
                     @div
@@ -279,7 +277,7 @@ module.exports = new View (data) ->
                           @translate "(%d other questions)", story.questions.length - 1
 
                     if stories.length > 1 then @div class: "btn-group pull-right", ->
-                      @a 
+                      @a
                         class: "btn btn-default"
                         href: "#stories-dialog"
                         data: slide: "prev"
@@ -290,10 +288,8 @@ module.exports = new View (data) ->
                         class   : "btn"
                         "#{n+1} / #{stories.length}"
 
-                      @a 
+                      @a
                         class: "btn btn-default"
                         href: "#stories-carousel"
                         data: slide: "next"
                         => @i class: "fa fa-chevron-right"
-
-

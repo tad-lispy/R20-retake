@@ -76,5 +76,6 @@
 	"Type to search or questions...": "Type to search or questions...",
 	"Unpublished questions": "Unpublished questions",
 	"There are drafts for those questions, but none of them is published": "There are drafts for those questions, but none of them is published",
-	"The question of %s": "The question of %s"
+	"The question of %s": "The question of %s",
+	"Not published yet.": "Not published yet."
 }
