@@ -11,6 +11,7 @@ module.exports = new View (data) ->
   {
     query
     stories
+    unpublished
     csrf
     user
   } = data
@@ -62,6 +63,12 @@ module.exports = new View (data) ->
             else @strong => @translate "No questions abstracted yet."
 
     else @div class: "alert alert-info", => @translate "Nothing like that found. Sorry :P"
+
+    if unpublished?.length
+      @h3 => @translate "Unpublished stories"
+      @p class: "text-muted", @translate "There are drafts for those stories, but none of them is published"
+      @ul => for story in unpublished
+        @li => @a href:  '/stories/' + story._id, story._id
 
     if user?.can 'tell a story' then @modal
       title : @cede => @translate "New story"
