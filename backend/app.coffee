@@ -12,7 +12,10 @@ config   = require 'config-object'
 do require './setup'
 
 # Connect to data store
-mongoose.connect Array(config.mongo.url).join ','
+# TODO: Use object notation to allow reuse in ES river configuration
+mongourl = config.get 'mongo/url'
+mongourl = [ mongourl ] unless mongourl instanceof Array
+mongoose.connect mongourl.join ','
 
 # Load middleware
 app      = new express
