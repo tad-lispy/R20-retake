@@ -207,7 +207,7 @@ module.exports = new View (data) ->
           @translate "No answers to this question yet."
 
       # Display new answer form unless this participant already answered this question
-      if user? then unless  (_.any answers, (answer) -> answer.author?._id?.equals user._id)
+      if user?.can 'post an answer' then unless  (_.any answers, (answer) -> answer.author?._id?.equals user._id)
         if answers?.drafted? then @div class: "alert alert-info", =>
           @translate "There is at least one draft of your answer to this question"
           @a
@@ -223,11 +223,11 @@ module.exports = new View (data) ->
           action: "/questions/#{question._id}/answers"
           =>
             @div class: "form-group", =>
-              @label for: "text", => @translate "Have an answer? Please share it!"
+              @label for: "text", => @translate "Answer by %s", user.name
               @textarea
                 class       : "form-control"
                 name        : "text"
-                placeholder : @cede => @translate "Your answer..."
+                placeholder : @cede => @translate "Know the answer? Please share it..."
                 data        :
                   shortcut    : "a"
 
