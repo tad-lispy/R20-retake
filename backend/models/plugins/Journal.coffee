@@ -91,7 +91,7 @@ plugin = (schema, options = {}) ->
           query : query
           out: replace: output
           done
-        else do done
+        else done null, undefined, 'collection doesnt exist'
 
       (result, stats, done) => @count done
       (count, done) =>
