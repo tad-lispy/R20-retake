@@ -67,9 +67,11 @@ module.exports = new View (data) ->
 
     if unpublished?.length
       @h3 => @translate "Unpublished stories"
-      @p class: "text-muted", @translate "There are drafts for those stories, but none of them is published"
+      @p class: "text-muted", => @translate "There are drafts for those stories, but none of them is published"
       @ul => for story in unpublished
-        @li => @a href:  '/stories/' + story._id, => @moment story
+        @li => @a href:  '/stories/' + story._id, =>
+          @translate "The case of %s", moment(story._id.getTimestamp()).format 'LL'
+
 
     if user?.can 'tell a story' then @modal
       title : @cede => @translate "New story"
