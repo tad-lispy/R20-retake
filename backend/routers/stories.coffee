@@ -81,8 +81,9 @@ router.route '/:story_id'
       if error then return done error
       res.redirect "/stories/#{story.id}/journal/#{draft.id}"
 
-  .delete (req, res) ->
-    res.serve 'Remove a story, but leave journal'
+  .delete approve('unpublish a story'), (req, res) ->
+    req.story.removeDocument author: req.user.id, (error, entry) ->
+      res.redirect 'back'
 
 # Questions' operations
 router.route '/:story_id/questions'
