@@ -77,5 +77,16 @@
 	"Unpublished questions": "Unpublished questions",
 	"There are drafts for those questions, but none of them is published": "There are drafts for those questions, but none of them is published",
 	"The question of %s": "The question of %s",
-	"Not published yet.": "Not published yet."
+	"Not published yet.": "Not published yet.",
+	"See actual question": "See actual question",
+	"Edit this question": "Edit this question",
+	"sample stories (%d)": "sample stories (%d)",
+	"remove question": "remove question",
+	"Remove this question?": "Remove this question?",
+	"Removing a question is roughly equivalent to unpublishing it. It can be undone. All drafts will be preserved.": "Removing a question is roughly equivalent to unpublishing it. It can be undone. All drafts will be preserved.",
+	"Drafts of this question": "Drafts of this question",
+	"No answers to this question yet.": "No answers to this question yet.",
+	"Have an answer? Please share it!": "Have an answer? Please share it!",
+	"Your answer...": "Your answer...",
+	"send": "send"
 }

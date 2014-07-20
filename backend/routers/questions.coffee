@@ -9,7 +9,7 @@ approve = require "../middleware/approve-request"
 Question    = require "../models/Question"
 Participant = require "../models/Participant"
 
-# List's of stories operations
+# List of questions operations
 router.route '/'
 
   .get (req, res) ->
@@ -26,7 +26,7 @@ router.route '/'
     question = new Question data
     question.saveDraft author: req.user.id, (error, draft)->
       if error then return done error
-      res.redirect "/questions/#{question.id}/drafts/#{draft.id}"
+      res.redirect "/questions/#{question.id}/journal/#{draft.id}"
 
 router.param 'id', (req, res, done, id) ->
   if not /^[0-9a-fA-F]{24}$/.test id then return done new Error2
@@ -59,12 +59,12 @@ router.param 'id', (req, res, done, id) ->
 router.param 'entry_id', (req, res, done, id) ->
   req.entry = _.find req.journal, (entry) -> entry.id is id
   if not req.entry then return done new Error2
-    code: 404
-    name: "Not Found"
+    code   : 404
+    name   : "Not Found"
     message: "Journal entry not found."
   do done
 
-# Single story's operations
+# Single question's operations
 router.route '/:id'
   .get (req, res) ->
     res.template = require "../templates/questions/single"
@@ -80,47 +80,41 @@ router.route '/:id'
     data = _.pick req.body, [
       'text'
     ]
-    { story } = req
-    story.set data
-    story.saveDraft author: req.user.id, (error, draft) ->
+    { question } = req
+    question.set data
+    question.saveDraft author: req.user.id, (error, draft) ->
       if error then return done error
-      res.redirect "/stories/#{story.id}/journal/#{draft.id}"
+      res.redirect "/questions/#{question.id}/journal/#{draft.id}"
 
-  .delete approve('unpublish a story'), (req, res) ->
-    req.story.removeDocument author: req.user.id, (error, entry) ->
+  .delete approve('unpublish a question'), (req, res) ->
+    req.question.removeDocument author: req.user.id, (error, entry) ->
       res.redirect 'back'
 
 # Questions' operations
-router.route '/:story_id/questions'
+router.route '/:id/stories'
   .get (req, res) ->
-    res.serve 'A list of questions related to story'
-  .post (req, res) ->
-    res.serve 'Create a story-question link'
-
-router.route '/:story_id/questions/:question_id'
-  .delete (req, res) ->
-    res.serve 'Remove a story-question link'
+    res.serve 'A list of stories related to question'
 
 # Journal operations
 # TODO: own router?
 
-router.route '/:story_id/journal'
+router.route '/:id/journal'
   .get (req, res) ->
-    res.serve 'Get a list of journal entries for this story'
+    res.serve 'Get a list of journal entries for this question'
 
-router.route '/:story_id/journal/:entry_id'
+router.route '/:id/journal/:entry_id'
   .get (req, res) ->
-    res.template = require "../templates/stories/single"
+    res.template = require "../templates/questions/single"
     data = _.pick req, [
-      'story'
+      'question'
       'journal'
       'entry'
     ]
     res.serve data
 
-router.route '/:story_id/journal/:entry_id/apply'
-  .post approve('publish a story'), (req, res) ->
-    req.entry.apply author: req.user.id, (error, story) ->
-      res.redirect "/stories/#{story.id}"
+router.route '/:id/journal/:entry_id/apply'
+  .post approve('publish a question'), (req, res) ->
+    req.entry.apply author: req.user.id, (error, question) ->
+      res.redirect "/questions/#{question.id}"
 
 module.exports = router

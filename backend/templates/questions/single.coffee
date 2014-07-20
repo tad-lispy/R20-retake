@@ -7,17 +7,17 @@ _         = require "lodash"
 module.exports = new View (data) ->
   {
     question
-    draft
+    entry
     stories
     answers
     journal
-    participant
+    user
     csrf
   } = data
 
   data.classes ?= []
   data.classes.push "question"
-  if draft then data.classes.push "draft"
+  if entry then data.classes.push "draft"
 
 
   # TODO: if used as subtitle it shows twice on the page (as subtitle and in jumbotron)
@@ -26,27 +26,25 @@ module.exports = new View (data) ->
   # if subtitle then data.subtitle = subtitle
 
   layout data, =>
-    if draft?
-      applied  = Boolean question._draft?.equals draft._id
+    if entry?
+      applied  = Boolean question._draft?.equals entry._id
 
       @draftAlert
         applied   : applied
-        draft     : draft
+        draft     : entry
         actualurl : "/questions/#{question._id}"
 
     # The question
     @div class: "jumbotron", =>
-      if draft?
-        @markdown draft.data.text
+      if entry?
+        @markdown entry.data.text
 
         @form
-          action: "/questions/#{question._id}/"
+          action: "/questions/#{question.id}/journal/#{entry.id}/apply"
           method: "POST"
           class : "clearfix"
           =>
-            @input type: "hidden", name: "_method", value: "PUT"
             @input type: "hidden", name: "_csrf"  , value: data.csrf
-            @input type: "hidden", name: "_draft" , value: draft._id
 
             @div class: "btn-group pull-right", =>
               @button
@@ -100,7 +98,7 @@ module.exports = new View (data) ->
           ,
             title : @cede => @translate "show drafts"
             href  : "#drafts"
-            icon  : "folder-close"
+            icon  : "clock-o"
             data  :
               toggle  : "modal"
               target  : "#drafts-dialog"
@@ -115,24 +113,24 @@ module.exports = new View (data) ->
               shortcut: "del enter"
           ]
 
-    unless question.isNew and not draft?
+    unless question.isNew and not entry?
       @modal
         title : @cede => @translate "Edit this question"
         id    : "question-edit-dialog"
         => @questionForm
           method  : "POST"
-          action  : "/questions/#{question._id}/drafts"
+          action  : "/questions/#{question.id}"
           csrf    : csrf
-          question: draft?.data or question
+          question: entry?.data or question
 
-    if draft? or question.isNew
+    if entry? or question.isNew
       @h4 class: "text-muted", =>
-        @i class: "fa  fa-fw fa-time"
+        @i class: "fa  fa-fw fa-clock"
         @translate "Versions"
       @draftsTable
         drafts  : journal.filter (entry) -> entry.action is "draft"
         applied : question?._draft
-        chosen  : draft?._id
+        chosen  : entry?._id
         root    : "/questions/"
 
     else
@@ -169,13 +167,13 @@ module.exports = new View (data) ->
           @draftsTable
             drafts  : journal.filter (entry) -> entry.action is "draft"
             applied : question?._draft
-            chosen  : draft?._id
+            chosen  : entry?._id
             root    : "/questions/"
 
       @h4 class: "text-muted", =>
         @i class: "fa fa-puzzle-piece fa-fw"
         @translate "Answers"
-      if answers.length then for answer in answers
+      if answers?.length then for answer in answers
         @div class: "panel panel-default", id: "answer-#{answer._id}", =>
           @div class: "panel-heading clearfix", =>
             @strong class: "text-muted", =>
@@ -209,11 +207,11 @@ module.exports = new View (data) ->
           @translate "No answers to this question yet."
 
       # Display new answer form unless this participant already answered this question
-      if participant? then unless  (_.any answers, (answer) -> answer.author?._id?.equals participant?._id)
-        if answers.drafted? then @div class: "alert alert-info", =>
+      if user? then unless  (_.any answers, (answer) -> answer.author?._id?.equals user._id)
+        if answers?.drafted? then @div class: "alert alert-info", =>
           @translate "There is at least one draft of your answer to this question"
           @a
-            href  : "/questions/#{question._id}/answers/#{answers.drafted._id}"
+            href  : "/questions/#{question._id}/answers/#{answers?.drafted._id}"
             class: "btn btn-default btn-xs pull-right"
             =>
               @i class: "fa fa-eye-open fa-fw"
@@ -276,7 +274,7 @@ module.exports = new View (data) ->
                           @text " "
                           @translate "(%d other questions)", story.questions.length - 1
 
-                    if stories.length > 1 then @div class: "btn-group pull-right", ->
+                    if stories?.length > 1 then @div class: "btn-group pull-right", ->
                       @a
                         class: "btn btn-default"
                         href: "#stories-dialog"
@@ -286,7 +284,7 @@ module.exports = new View (data) ->
                       @span
                         disabled: true
                         class   : "btn"
-                        "#{n+1} / #{stories.length}"
+                        "#{n+1} / #{stories?.length}"
 
                       @a
                         class: "btn btn-default"
