@@ -78,6 +78,7 @@ plugin = (schema, options = {}) ->
     # Find all documents that have drafts, but are not stored (i.e. published)
     if not callback and typeof query is 'function' then [callback, query] = [query, {}]
     query.action = 'draft'
+    query.model  = @modelName
 
     output = 'journal.unpublished.' + @collection.name # Output collection name
 
