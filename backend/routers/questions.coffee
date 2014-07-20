@@ -50,10 +50,25 @@ router.param 'id', (req, res, done, id) ->
         path: 'meta.author'
         (error, journal) ->
           done error, question, journal
-  ], (error, question, journal) ->
+
+    (question, journal, done) ->
+      question.findStories (error, stories) ->
+        done error, question, journal, stories
+
+    (question, journal, stories, done) ->
+      question.findAnswers (error, answers) ->
+        done error, question, journal, stories, answers
+
+  ], (error, question, journal, stories, answers) ->
+
       if error then return done error
-      req.question = question
-      req.journal  = journal
+      _.extend req, {
+        question
+        journal
+        stories
+        answers
+      }
+
       done null
 
 router.param 'entry_id', (req, res, done, id) ->
@@ -68,13 +83,11 @@ router.param 'entry_id', (req, res, done, id) ->
 router.route '/:id'
   .get (req, res) ->
     res.template = require "../templates/questions/single"
-    {
-      question
-      journal
-    } = req
     res.serve _.pick req, [
       'question'
       'journal'
+      'stories'
+      'answers'
     ]
   .post (req, res) ->
     data = _.pick req.body, [

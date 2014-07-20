@@ -88,5 +88,7 @@
 	"No answers to this question yet.": "No answers to this question yet.",
 	"Have an answer? Please share it!": "Have an answer? Please share it!",
 	"Your answer...": "Your answer...",
-	"send": "send"
+	"send": "send",
+	"Answer by %s": "Answer by %s",
+	"Know the answer? Please share it...": "Know the answer? Please share it..."
 }

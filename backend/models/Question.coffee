@@ -16,7 +16,7 @@ Question.methods.findStories = (conditions, callback) ->
     callback = conditions
     conditions = {}
 
-  conditions.questions = @._id
+  conditions.questions = @id
 
   Story.find conditions, callback
 
@@ -25,7 +25,7 @@ Question.methods.findAnswers = (conditions, callback) ->
     callback = conditions
     conditions = {}
 
-  conditions.question = @._id
+  conditions.question = @id
 
   Answer.find conditions, callback
 
