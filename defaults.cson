@@ -24,19 +24,20 @@ participants:
     student:
       as     : 'reader'
       can    : [
-        'post questions'
-        'post answers'
+        'review drafts of stories'
+        'post a question'
+        'post an answer'
       ]
     lawyer:
       as    : 'student'
       can   : [
-        'publish questions'
-        'publish answers'
+        'publish a question'
+        'publish an answer'
       ]
     editor:
       as    : 'lawyer'
       can   : [
-        'publish stories'
+        'publish a story'
       ]
     administrator:
       can: [ 'everything' ]
