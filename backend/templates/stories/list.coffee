@@ -1,4 +1,5 @@
 View      = require "teacup-view"
+moment    = require "moment"
 
 layout    = require "../layouts/default"
 
@@ -68,7 +69,7 @@ module.exports = new View (data) ->
       @h3 => @translate "Unpublished stories"
       @p class: "text-muted", @translate "There are drafts for those stories, but none of them is published"
       @ul => for story in unpublished
-        @li => @a href:  '/stories/' + story._id, story._id
+        @li => @a href:  '/stories/' + story._id, => @moment story
 
     if user?.can 'tell a story' then @modal
       title : @cede => @translate "New story"

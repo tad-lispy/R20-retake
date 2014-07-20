@@ -77,6 +77,7 @@ plugin = (schema, options = {}) ->
   schema.static 'findUnpublished', (query, callback) ->
     # Find all documents that have drafts, but are not stored (i.e. published)
     if not callback and typeof query is 'function' then [callback, query] = [query, {}]
+    query.action = 'draft'
 
     output = 'journal.unpublished.' + @collection.name # Output collection name
 
@@ -86,7 +87,8 @@ plugin = (schema, options = {}) ->
         if count then Entry.mapReduce
           map: -> emit @data._id, 0
           reduce: (id, published) -> Array.sum published
-          out: reduce: output
+          query : query
+          out: replace: output
           done
         else do done
 
