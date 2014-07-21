@@ -6,6 +6,8 @@
 
 elasticsearch = require "elasticsearch"
 Error2        = require "error2"
+async         = require "async"
+
 config        = require "config-object"
 
 esconfig = config.get 'elasticsearch'
@@ -19,19 +21,45 @@ es.ping
 module.exports = (schema, options = {}) ->
   { collection } = options
   debugger
-  es.transport.request
-    method: 'PUT'
-    path  : "_river/r20-#{collection}/_meta"
-    body  :
-      type: "mongodb"
-      mongodb:
-        servers: [
-          host: 'mongo' # TODO: smarter
-        ]
-        db: "r20"
-        collection: collection
-      index:
-        name: "r20"
-        type: collection
+
+  async.series [
+    (done) -> es.transport.request
+      method: 'DELETE'
+      path  : 'r20'
+      ignore: 404
+      done
+
+    (done) -> es.transport.request
+      method: 'DELETE'
+      path  : "_river/r20-#{collection}"
+      ignore: 404
+      done
+
+    (done) -> es.transport.request
+      method: 'PUT'
+      path  : 'r20'
+      body  : settings: index: analysis: analyzer: default: type: "morfologik"
+
+    (done) -> es.transport.request
+      method: 'PUT'
+      path  : "_river/r20-#{collection}/_meta"
+      body  :
+        type: "mongodb"
+        mongodb:
+          servers: [
+            host: 'mongo' # TODO: smarter
+          ]
+          db: "r20"
+          collection: collection
+        index:
+          name: "r20"
+          type: collection
+      done
+  ], (error) ->
+    if error then throw error
 
   schema.static 'search', (query, callback) ->
+    es.search
+      index: 'r20'
+      type : collection
+      body : "kot"
