@@ -38,7 +38,7 @@ module.exports = new View (data) ->
                 @i class: "fa fa-fw fa-search"
                 @translate "Search"
 
-            if user.can 'suggest a new question' then @dropdown items: [
+            if user?.can 'suggest a new question' then @dropdown items: [
               title : @cede => @translate "new question"
               icon  : "plus-circle"
               data  :
@@ -56,7 +56,7 @@ module.exports = new View (data) ->
           @a href: "/questions/#{question._id}", class: "panel-body list-group-item lead", =>
             @markdown question.text
           @div class: "panel-footer", =>
-            if question.answers.length
+            if question.answers?.length
               @ul class: "list-inline", =>
                 @strong => @translate "%d answers by:", question.answers.length
                 for answer in question.answers
@@ -74,7 +74,7 @@ module.exports = new View (data) ->
           @translate "The question of %s", moment(question._id.getTimestamp()).format 'LL'
 
 
-    if user.can 'suggest a new question' then @modal
+    if user?.can 'suggest a new question' then @modal
       title : @cede => @translate "New question"
       id    : "question-new-dialog"
       =>
