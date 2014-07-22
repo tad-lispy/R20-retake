@@ -14,10 +14,10 @@ router.route '/'
 
   .get (req, res) ->
     res.template = require '../templates/stories/list'
-    if req.query.search
-      Story.search req.query.search, (error, result) ->
+    if req.query.search?
+      return Story.search req.query.search, (error, result) ->
         if error then return done error
-        return res.serve result
+        res.serve stories: result.map (hit) -> hit.document
 
     async.parallel
       stories:     (done) -> Story.find done

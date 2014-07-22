@@ -82,6 +82,13 @@ module.exports = (schema, options = {}) ->
       (done) -> es.search query, done
 
       (response, status, done) ->
-        done null, response.hits
+        done null, response.hits.hits.map (hit) ->
+          document: hit._id
+          score   : hit.score
+
+      (documents, done) =>
+        @populate documents,
+          path: 'document'
+          done
 
     ], callback
