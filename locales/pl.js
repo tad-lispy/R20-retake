@@ -90,5 +90,6 @@
 	"Your answer...": "Your answer...",
 	"send": "send",
 	"Answer by %s": "Answer by %s",
-	"Know the answer? Please share it...": "Know the answer? Please share it..."
+	"Know the answer? Please share it...": "Know the answer? Please share it...",
+	"No answers yet.": "No answers yet."
 }

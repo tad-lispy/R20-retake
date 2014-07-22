@@ -1,5 +1,4 @@
 $ ->
-  console.log "Hello!"
   $('[data-search]').each ->
     element     = $ @
     collection  = element.data "search"
@@ -18,7 +17,8 @@ $ ->
         do target.empty
 
       element.ajaxForm (data) ->
-        for doc in data
+        console.dir data
+        for doc in data[collection]
           item = do source.clone
           for key, value of doc
             item.find("[name='#{key}']").val value

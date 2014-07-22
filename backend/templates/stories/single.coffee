@@ -19,7 +19,7 @@ module.exports = new View (data) ->
   data.subtitle = @cede => @translate "The case of %s", moment(story._id.getTimestamp()).format 'LL'
 
   layout data, =>
-    data.scripts.push "/js/assign-question.js"
+    data.scripts.push "/scripts/assign-question.js"
     data.scripts.push "//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.45/jquery.form.min.js"
 
 
@@ -193,10 +193,10 @@ module.exports = new View (data) ->
                     @div class: "input-group input-group-sm", =>
                       @input
                         type        : "text"
-                        name        : "query"
+                        name        : "search"
                         class       : "form-control"
                         placeholder : @cede => @translate "Type to search for a question to assign..."
-                        value       : query
+                        value       : query.search
                       @div class: "input-group-btn", =>
                         @button
                           class   : "btn btn-primary"
