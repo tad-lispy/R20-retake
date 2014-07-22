@@ -222,7 +222,6 @@ module.exports = new View (data) ->
                           name  : "_csrf"
                           value : csrf
 
-
                         @button
                           type    : "submit"
                           class   : "btn btn-block"
@@ -248,7 +247,7 @@ module.exports = new View (data) ->
 
 
         @div class: "list-group", =>
-          if story.questions.length
+          if story.questions?.length
             for question in story.questions
               @a href: "/questions/#{question._id}", class: "list-group-item", =>
                 @span class: "badge", question.answers?.length or 0
@@ -256,7 +255,7 @@ module.exports = new View (data) ->
                   class: "list-group-item-heading"
                   question.text
 
-                if question.answers.length then @p =>
+                if question.answers?.length then @p =>
                   @translate "Answers by: "
                   for answer in question.answers
                     @text answer.author?.name or @cede => @translate "unknown author"

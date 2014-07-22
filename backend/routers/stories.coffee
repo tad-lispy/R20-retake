@@ -7,6 +7,7 @@ async   = require "async"
 approve = require "../middleware/approve-request"
 
 Story       = require "../models/Story"
+Question    = require "../models/Question"
 Participant = require "../models/Participant"
 
 # List's of stories operations
@@ -14,13 +15,21 @@ router.route '/'
 
   .get (req, res) ->
     res.template = require '../templates/stories/list'
-    if req.query.search?
-      return Story.search req.query.search, (error, result) ->
-        if error then return done error
-        res.serve stories: result.map (hit) -> hit.document
 
     async.parallel
-      stories:     (done) -> Story.find done
+      stories:     (done) ->
+        async.waterfall [
+          (done) ->
+            # TODO: Always use Story.search
+            if req.query.search
+              return Story.search req.query.search, (error, result) ->
+                if error then return done error
+                done null, result.map (hit) -> hit.document
+
+            else Story.find done
+          (stories, done) ->
+            Question.populate stories, 'questions', done
+        ], done
       unpublished: (done) -> Story.findUnpublished done
       (error, data) ->
         if error then return req.next error
@@ -44,6 +53,9 @@ router.param 'story_id', (req, res, done, id) ->
 
   async.waterfall [
     (done) -> Story.findByIdOrCreate id, done
+
+    (story, done) ->
+      Question.populate story, 'questions', done
 
     (story, done) -> story.findEntries action: 'draft', (error, journal) ->
       # TODO: If story is new and no drafts then 404
@@ -94,8 +106,22 @@ router.route '/:story_id'
 router.route '/:story_id/questions'
   .get (req, res) ->
     res.serve 'A list of questions related to story'
-  .post (req, res) ->
-    res.serve 'Create a story-question link'
+  .post approve('assign questions to stories'), (req, res) ->
+    async.waterfall [
+      (done) -> Question.findById req.body._id, done
+      (question, done) ->
+        if not question then return done new Error2
+          code: 404
+          name: "Question not found"
+          message: "Cannot add a reference to nonexisting question."
+
+        req.story.saveReference 'questions', question, author: req.user, done
+
+      (entry, done) ->
+        entry.apply author: req.user, done
+    ], (error) ->
+      if error then return req.next error
+      res.redirect "/stories/#{req.story.id}"
 
 router.route '/:story_id/questions/:question_id'
   .delete (req, res) ->

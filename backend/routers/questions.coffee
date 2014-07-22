@@ -15,7 +15,7 @@ router.route '/'
   .get (req, res) ->
     res.template = require '../templates/questions/list'
 
-    if req.query.search?
+    if req.query.search
       return Question.search req.query.search, (error, result) ->
         if error then return done error
         res.serve questions: result.map (hit) -> hit.document

@@ -31,6 +31,8 @@ module.exports = new View (data) ->
             class       : "form-control"
             placeholder : @cede => @translate "Type to search for story..."
             value       : query.search
+            data        :
+              shortcut    : '/'
           @div class: "input-group-btn", =>
             @button
               class : "btn btn-primary"
@@ -58,7 +60,7 @@ module.exports = new View (data) ->
           @div class: "panel-footer", =>
             if story.questions.length
               @ul class: "list-inline", =>
-                @strong "%d legal questions:", story.questions.length
+                @strong => @translate "%d legal questions:", story.questions.length
                 for question in story.questions
                   @li => @a href: "/questions/#{question._id}", question.text
             else @strong => @translate "No questions abstracted yet."

@@ -91,5 +91,10 @@
 	"send": "send",
 	"Answer by %s": "Answer by %s",
 	"Know the answer? Please share it...": "Know the answer? Please share it...",
-	"No answers yet.": "No answers yet."
+	"No answers yet.": "No answers yet.",
+	"No answers yet": "No answers yet",
+	"unasign": "unasign",
+	"Sample stories": "Sample stories",
+	"got to story": "got to story",
+	"%d legal questions:": "%d legal questions:"
 }
