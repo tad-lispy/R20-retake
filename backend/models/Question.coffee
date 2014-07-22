@@ -34,5 +34,7 @@ Question.plugin (require "./plugins/Journal"),
     path  : "meta.author"
     model : "Participant"
 
+Question.plugin require('./plugins/Search'),
+  collection: 'questions'
 
 module.exports = mongoose.model 'Question', Question
