@@ -15,6 +15,7 @@ mongo :
 elasticsearch:
   host  : 'localhost:9200',
   log   : 'trace'
+  apiVersion: '1.1'
 
 auth  :
   fake  : no

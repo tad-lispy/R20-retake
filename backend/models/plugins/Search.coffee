@@ -22,25 +22,36 @@ module.exports = (schema, options = {}) ->
   { collection } = options
   debugger
 
-  async.series [
-    (done) -> es.transport.request
-      method: 'DELETE'
-      path  : 'r20'
-      ignore: 404
-      done
+  async.waterfall [
+    # If index doesn't exist, then create it
+    (done) ->
+      es.indices.exists
+        index: 'r20'
+        done
 
-    (done) -> es.transport.request
+    (exists, status, done) ->
+      if not exists then es.indices.create
+        index: 'r20'
+        body : settings: index: analysis: analyzer: default: type: "morfologik"
+        done
+      else process.nextTick -> done null, null, true
+
+    # Remove river if exists
+    (response, status, done) -> es.transport.request
       method: 'DELETE'
       path  : "_river/r20-#{collection}"
-      ignore: 404
+      ignore: [404]
       done
 
-    (done) -> es.transport.request
-      method: 'PUT'
-      path  : 'r20'
-      body  : settings: index: analysis: analyzer: default: type: "morfologik"
+    # Remove all documents from this collection
+    (response, status, done) -> es.transport.request
+      method: 'DELETE'
+      path  : "r20/#{collection}"
+      ignore: [404]
+      done
 
-    (done) -> es.transport.request
+    # Recreate river
+    (response, status, done) -> es.transport.request
       method: 'PUT'
       path  : "_river/r20-#{collection}/_meta"
       body  :
@@ -59,7 +70,18 @@ module.exports = (schema, options = {}) ->
     if error then throw error
 
   schema.static 'search', (query, callback) ->
-    es.search
-      index: 'r20'
-      type : collection
-      body : "kot"
+    if typeof query is 'string'
+      query = q: query
+    else
+      query = body: query
+
+    query.index = 'r20'
+    query.type  = collection
+
+    async.waterfall [
+      (done) -> es.search query, done
+
+      (response, status, done) ->
+        done null, response.hits
+
+    ], callback
