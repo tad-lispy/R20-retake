@@ -114,6 +114,8 @@ router.route '/:id/stories'
   .get (req, res) ->
     res.serve 'A list of stories related to question'
 
+router.use '/:id/answers', require './answers'
+
 # Journal operations
 # TODO: own router?
 

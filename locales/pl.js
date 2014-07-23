@@ -96,5 +96,6 @@
 	"unasign": "unasign",
 	"Sample stories": "Sample stories",
 	"got to story": "got to story",
-	"%d legal questions:": "%d legal questions:"
+	"%d legal questions:": "%d legal questions:",
+	"(%d other questions)": "(%d other questions)"
 }

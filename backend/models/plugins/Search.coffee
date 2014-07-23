@@ -20,7 +20,6 @@ es.ping
 
 module.exports = (schema, options = {}) ->
   { collection } = options
-  debugger
 
   async.waterfall [
     # If index doesn't exist, then create it
@@ -60,7 +59,7 @@ module.exports = (schema, options = {}) ->
           servers: [
             host: 'mongo' # TODO: smarter
           ]
-          db: "r20"
+          db: "R20"
           collection: collection
         index:
           name: "r20"

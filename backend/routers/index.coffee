@@ -15,7 +15,6 @@ router.use "/#{route}", require "./#{route}" for route in [
   'participants'
   'stories'
   'questions'
-  # TODO:
   # 'answers'
 ]
 

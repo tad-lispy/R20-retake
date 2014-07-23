@@ -10,7 +10,7 @@ site  :
   motto : "podnosimy świadomość prawną"
 
 mongo :
-  url   : "mongodb://localhost/r20"
+  url   : "mongodb://localhost/R20"
 
 elasticsearch:
   host  : 'localhost:9200',
