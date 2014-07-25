@@ -106,7 +106,7 @@ router.route '/:story_id'
 router.route '/:story_id/questions'
   .get (req, res) ->
     res.serve 'A list of questions related to story'
-  .post approve('assign questions to stories'), (req, res) ->
+  .post approve('assign question to a story'), (req, res) ->
     async.waterfall [
       (done) -> Question.findById req.body._id, done
       (question, done) ->

@@ -97,5 +97,10 @@
 	"Sample stories": "Sample stories",
 	"got to story": "got to story",
 	"%d legal questions:": "%d legal questions:",
-	"(%d other questions)": "(%d other questions)"
+	"(%d other questions)": "(%d other questions)",
+	"by %s (%s):": "by %s (%s):",
+	"Edit answer by %s": "Edit answer by %s",
+	"What's the correct answer?": "What's the correct answer?",
+	"Here goes some serious legal knowledge...": "Here goes some serious legal knowledge...",
+	"redaktor": "redaktor"
 }

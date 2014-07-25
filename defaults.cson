@@ -43,6 +43,7 @@ participants:
       as    : 'lawyer'
       can   : [
         'publish a story'
+        'assign question to a story'
       ]
     administrator:
       can: [ 'everything' ]
