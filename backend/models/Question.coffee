@@ -27,7 +27,10 @@ Question.methods.findAnswers = (conditions, callback) ->
 
   conditions.question = @id
 
-  Answer.find conditions, callback
+  Answer
+    .find conditions
+    .populate 'author'
+    .exec callback
 
 Question.plugin (require "./plugins/Journal"),
   populate:
