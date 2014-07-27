@@ -13,6 +13,7 @@ module.exports = new View (data) ->
     journal
     user
     csrf
+    user_drafted
   } = data
 
   data.classes ?= []
@@ -207,14 +208,14 @@ module.exports = new View (data) ->
           @translate "No answers to this question yet."
 
       # Display new answer form unless this participant already answered this question
-      if user?.can 'post an answer' then unless  (_.any answers, (answer) -> answer.author?._id?.equals user._id)
-        if answers?.drafted? then @div class: "alert alert-info", =>
+      if user?.can 'answer a question' then unless  (_.any answers, (answer) -> answer.author?._id?.equals user._id)
+        if user_drafted? then @div class: "alert alert-info", =>
           @translate "There is at least one draft of your answer to this question"
           @a
-            href  : "/questions/#{question._id}/answers/#{answers?.drafted._id}"
+            href  : "/questions/#{question._id}/answers/#{user_drafted._id}"
             class: "btn btn-default btn-xs pull-right"
             =>
-              @i class: "fa fa-eye-open fa-fw"
+              @i class: "fa fa-file-o fa-fw"
               @translate "see drafts"
 
         else @form

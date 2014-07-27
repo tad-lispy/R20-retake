@@ -109,5 +109,7 @@
 	"remove answer": "remove answer",
 	"Remove this answer?": "Remove this answer?",
 	"Removing an answer is roughly equivalent to unpublishing it. It can be undone. All drafts will be preserved.": "Removing an answer is roughly equivalent to unpublishing it. It can be undone. All drafts will be preserved.",
-	"%s answers:": "%s answers:"
+	"%s answers:": "%s answers:",
+	"There is at least one draft of your answer to this question": "There is at least one draft of your answer to this question",
+	"see drafts": "see drafts"
 }

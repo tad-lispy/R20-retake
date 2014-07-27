@@ -8,6 +8,7 @@ approve = require "../middleware/approve-request"
 
 Question    = require "../models/Question"
 Participant = require "../models/Participant"
+Answer      = require "../models/Answer"
 
 # List of questions operations
 router.route '/'
@@ -40,6 +41,7 @@ router.param 'id', (req, res, done, id) ->
     name: 'Unprocessable Entity'
     message: "#{id} is not a valid question identifier. Check your url."
 
+  # TODO: consider async.parallel - this is just slighly better then pyramid of doom!
   async.waterfall [
     (done) -> Question.findByIdOrCreate id, done
 
@@ -65,7 +67,14 @@ router.param 'id', (req, res, done, id) ->
       question.findAnswers (error, answers) ->
         done error, question, journal, stories, answers
 
-  ], (error, question, journal, stories, answers) ->
+    (question, journal, stories, answers, done) ->
+      Answer.findUnpublished
+        'data.question': question._id
+        'data.author'  : req.user?._id
+        (error, user_drafted) ->
+          done error, question, journal, stories, answers, user_drafted[0]
+
+  ], (error, question, journal, stories, answers, user_drafted) ->
 
       if error then return done error
       _.extend req, {
@@ -73,6 +82,7 @@ router.param 'id', (req, res, done, id) ->
         journal
         stories
         answers
+        user_drafted
       }
 
       done null
@@ -94,6 +104,8 @@ router.route '/:id'
       'journal'
       'stories'
       'answers'
+      'unpublished'
+      'user_drafted'
     ]
   .post (req, res) ->
     data = _.pick req.body, [
