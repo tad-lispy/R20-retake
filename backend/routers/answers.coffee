@@ -136,15 +136,20 @@ router.route '/:id'
       'journal'
       'question'
     ]
-# .post (req, res) ->
-#   data = _.pick req.body, [
-#     'text'
-#   ]
-#   { question } = req
-#   question.set data
-#   question.saveDraft author: req.user.id, (error, draft) ->
-#     if error then return done error
-#     res.redirect "/questions/#{question.id}/journal/#{draft.id}"
+
+  # Store new draft of an answer
+  .post approve('answer a question'), (req, res) ->
+    data = _.pick req.body, [
+      'text'
+    ]
+    {
+      answer
+      question
+    } = req
+    answer.set data
+    answer.saveDraft author: req.user.id, (error, draft) ->
+      if error then return done error
+      res.redirect "/questions/#{question.id}/answers/#{answer.id}/journal/#{draft.id}"
 #
 # .delete approve('unpublish a question'), (req, res) ->
 #   req.question.removeDocument author: req.user.id, (error, entry) ->

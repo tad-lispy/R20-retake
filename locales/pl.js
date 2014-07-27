@@ -108,5 +108,6 @@
 	"%s answers: %s": "%s answers: %s",
 	"remove answer": "remove answer",
 	"Remove this answer?": "Remove this answer?",
-	"Removing an answer is roughly equivalent to unpublishing it. It can be undone. All drafts will be preserved.": "Removing an answer is roughly equivalent to unpublishing it. It can be undone. All drafts will be preserved."
+	"Removing an answer is roughly equivalent to unpublishing it. It can be undone. All drafts will be preserved.": "Removing an answer is roughly equivalent to unpublishing it. It can be undone. All drafts will be preserved.",
+	"%s answers:": "%s answers:"
 }
