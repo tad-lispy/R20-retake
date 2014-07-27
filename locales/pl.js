@@ -102,5 +102,11 @@
 	"Edit answer by %s": "Edit answer by %s",
 	"What's the correct answer?": "What's the correct answer?",
 	"Here goes some serious legal knowledge...": "Here goes some serious legal knowledge...",
-	"redaktor": "redaktor"
+	"redaktor": "redaktor",
+	"Back to question": "Back to question",
+	"See actual answer": "See actual answer",
+	"%s answers: %s": "%s answers: %s",
+	"remove answer": "remove answer",
+	"Remove this answer?": "Remove this answer?",
+	"Removing an answer is roughly equivalent to unpublishing it. It can be undone. All drafts will be preserved.": "Removing an answer is roughly equivalent to unpublishing it. It can be undone. All drafts will be preserved."
 }

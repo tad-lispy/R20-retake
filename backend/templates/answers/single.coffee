@@ -1,51 +1,49 @@
 View      = require "teacup-view"
 layout    = require "../layouts/default"
 
-debug     = require "debug"
-$         = debug "R20:views:answer"
-
 module.exports = new View (data) ->
+  debugger
   {
     answer
-    draft
+    entry
     csrf
     journal
+    question
   } = data
 
   data.classes ?= []
   data.classes.push "answer"
-  if draft then data.classes.push "draft"
+  if entry then data.classes.push "draft"
 
-  if draft then question = draft.data.question
-  else          question = answer.question
+  if entry then question ?= entry.data.question
+  else          question ?= answer.question
 
   unless answer.isNew
-    author = draft?.data.author or answer.author
+    author = entry?.data.author or answer.author
     data.subtitle = @cede => @translate "%s answers: %s", author.name, question.text
 
   layout data, =>
-    if draft?
-      applied = Boolean answer._draft?.equals draft._id
-      
+    if entry?
+      applied = Boolean answer._draft?.equals entry._id
+
       @draftAlert
         applied   : applied
-        draft     : draft
-        actualurl : "/questions/#{question._id}/answers/#{answer?._id or draft?.data._id}"
+        draft     : entry
+        actualurl : "/questions/#{question._id}/answers/#{answer?._id or entry?.data._id}"
 
     # The answer
     @div class: "jumbotron", =>
-      if draft?
-        @markdown draft.data.text
+      if entry?
+        @markdown entry.data.text
 
+        # Apply form
         @form
-          action: "/questions/#{question._id}/answers/#{draft.data._id}"
+          action: "/questions/#{question._id}/answers/#{entry.data._id}/journal/#{entry.id}/apply"
           method: "POST"
           class : "clearfix"
           =>
-            @input type: "hidden", name: "_method", value: "PUT"
             @input type: "hidden", name: "_csrf"  , value: data.csrf
-            @input type: "hidden", name: "_draft" , value: draft._id
-            
+
             @div class: "btn-group pull-right", =>
               @button
                 class   : "btn btn-success"
@@ -66,7 +64,7 @@ module.exports = new View (data) ->
                   shortcut: "e"
               ]
 
-      else if answer.isNew 
+      else if answer.isNew
         @p class: "text-muted", =>
           @i class: "fa fa-fw fa-info-circle"
           @translate "Not published yet."
@@ -74,18 +72,18 @@ module.exports = new View (data) ->
           @a
             class : "btn btn-default"
             href  : "/questions/#{question._id}"
-            => 
+            =>
               @i class: "fa fa-arrow-left fa-fw"
               @translate "Back to question"
 
-      else 
+      else
         @markdown answer.text
 
         @div class: "clearfix", => @div class: "btn-group pull-right", =>
           @a
             class : "btn btn-default"
             href  : "/questions/#{question._id}"
-            => 
+            =>
               @i class: "fa fa-arrow-left fa-fw"
               @translate "Back to question"
           @dropdown items: [
@@ -105,21 +103,21 @@ module.exports = new View (data) ->
               target  : "#remove-dialog"
               shortcut: "del enter"
           ]
-        
-    unless answer.isNew and not draft?
-      @modal 
+
+    unless answer.isNew and not entry?
+      @modal
         title : question.text
         id    : "answer-edit-dialog"
         =>
           @answerForm
             method  : "POST"
-            action  : "/questions/#{question._id}/answers/#{answer._id}/drafts"
+            action  : "/questions/#{question._id}/answers/#{answer._id}"
             csrf    : csrf
-            answer  : draft?.data or answer
+            answer  : entry?.data or answer
             question: question
-        
-    unless answer.isNew or draft?
-      @modal 
+
+    unless answer.isNew or entry?
+      @modal
         title : @cede => @translate "Remove this answer?"
         id    : "remove-dialog"
         class : "modal-danger"
@@ -129,10 +127,10 @@ module.exports = new View (data) ->
             =>
               @input type: "hidden", name: "_csrf"   , value: csrf
               @input type: "hidden", name: "_method" , value: "DELETE"
-                              
+
               @div class: "well", =>
                 @markdown answer.text
-              
+
               @p => @translate "Removing an answer is roughly equivalent to unpublishing it. It can be undone. All drafts will be preserved."
 
               @div class: "form-group", =>
@@ -142,12 +140,12 @@ module.exports = new View (data) ->
                   =>
                     @i class: "fa fa-fw fa-times-circle"
                     @translate "Remove!"
-    
+
     @h4 class: "text-muted", =>
       @i class: "fa fa-time fa-fw"
       @translate "Versions"
     @draftsTable
-      drafts  : journal.filter (entry) -> entry.action is "draft" 
+      drafts  : journal.filter (entry) -> entry.action is "draft"
       applied : answer?._draft
-      chosen  : draft?._id
+      chosen  : entry?._id
       root    : "/questions/#{question._id}/answers/"

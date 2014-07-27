@@ -73,6 +73,7 @@ router.route '/'
           code: 403
           name: 'Answer to this question already drafted by this author'
           message: "#{user.name} already drafted an answered to this question"
+          draft  : unpublished[0]._id
         do done
 
       (done) ->
@@ -81,82 +82,73 @@ router.route '/'
     ],
       (error, draft) ->
         if error then return req.next error
-        res.redirect "/questions/#{question.id}/answers/#{draft.data.id}/journal/#{draft.id}"
+        res.redirect "/questions/#{draft.data.question}/answers/#{draft.data.id}/journal/#{draft.id}"
+
+router.param 'id', (req, res, done, id) ->
+  if not /^[0-9a-fA-F]{24}$/.test id then return done new Error2
+    code: 422
+    name: 'Unprocessable Entity'
+    message: "#{id} is not a valid answer identifier. Check your url."
+
+  async.waterfall [
+    (done) -> Answer.findByIdOrCreate id, done
+
+    (answer, done) -> answer.populate path: 'author question', done
+
+    (answer, done) -> answer.findEntries action: 'draft', (error, journal) ->
+      done error, answer, journal
+
+    (answer, journal, done) ->
+      if answer.isNew and not journal.length then return done new Error2
+        code   : 404
+        name   : "Answer not found"
+        message: "There is no answer at this address."
+
+      Participant.populate journal,
+        path: 'meta.author'
+        (error, journal) ->
+          done error, answer, journal
+
+  ], (error, answer, journal) ->
+
+      if error then return done error
+      _.extend req, {
+        answer
+        journal
+      }
+
+      done null
+
+router.param 'entry_id', (req, res, done, id) ->
+  req.entry = _.find req.journal, (entry) -> entry.id is id
+  if not req.entry then return done new Error2
+    code   : 404
+    name   : "Not Found"
+    message: "Journal entry not found."
+  do done
+
+# Single answer's operations
+router.route '/:id'
+  .get (req, res) ->
+    res.template = require "../templates/answers/single"
+    res.serve _.pick req, [
+      'answer'
+      'journal'
+      'question'
+    ]
+# .post (req, res) ->
+#   data = _.pick req.body, [
+#     'text'
+#   ]
+#   { question } = req
+#   question.set data
+#   question.saveDraft author: req.user.id, (error, draft) ->
+#     if error then return done error
+#     res.redirect "/questions/#{question.id}/journal/#{draft.id}"
 #
-# router.param 'id', (req, res, done, id) ->
-#   if not /^[0-9a-fA-F]{24}$/.test id then return done new Error2
-#     code: 422
-#     name: 'Unprocessable Entity'
-#     message: "#{id} is not a valid question identifier. Check your url."
-#
-#   async.waterfall [
-#     (done) -> Question.findByIdOrCreate id, done
-#
-#     (question, done) -> question.findEntries action: 'draft', (error, journal) ->
-#       done error, question, journal
-#
-#     (question, journal, done) ->
-#       if question.isNew and not journal.length then return done new Error2
-#         code   : 404
-#         name   : "Question not found"
-#         message: "There is no question at this address."
-#
-#       Participant.populate journal,
-#         path: 'meta.author'
-#         (error, journal) ->
-#           done error, question, journal
-#
-#     (question, journal, done) ->
-#       question.findStories (error, stories) ->
-#         done error, question, journal, stories
-#
-#     (question, journal, stories, done) ->
-#       question.findAnswers (error, answers) ->
-#         done error, question, journal, stories, answers
-#
-#   ], (error, question, journal, stories, answers) ->
-#
-#       if error then return done error
-#       _.extend req, {
-#         question
-#         journal
-#         stories
-#         answers
-#       }
-#
-#       done null
-#
-# router.param 'entry_id', (req, res, done, id) ->
-#   req.entry = _.find req.journal, (entry) -> entry.id is id
-#   if not req.entry then return done new Error2
-#     code   : 404
-#     name   : "Not Found"
-#     message: "Journal entry not found."
-#   do done
-#
-# # Single question's operations
-# router.route '/:id'
-#   .get (req, res) ->
-#     res.template = require "../templates/questions/single"
-#     res.serve _.pick req, [
-#       'question'
-#       'journal'
-#       'stories'
-#       'answers'
-#     ]
-#   .post (req, res) ->
-#     data = _.pick req.body, [
-#       'text'
-#     ]
-#     { question } = req
-#     question.set data
-#     question.saveDraft author: req.user.id, (error, draft) ->
-#       if error then return done error
-#       res.redirect "/questions/#{question.id}/journal/#{draft.id}"
-#
-#   .delete approve('unpublish a question'), (req, res) ->
-#     req.question.removeDocument author: req.user.id, (error, entry) ->
-#       res.redirect 'back'
+# .delete approve('unpublish a question'), (req, res) ->
+#   req.question.removeDocument author: req.user.id, (error, entry) ->
+#     res.redirect 'back'
 #
 # # Questions' operations
 # router.route '/:id/stories'
@@ -170,19 +162,23 @@ router.route '/'
 #   .get (req, res) ->
 #     res.serve 'Get a list of journal entries for this question'
 #
-# router.route '/:id/journal/:entry_id'
-#   .get (req, res) ->
-#     res.template = require "../templates/questions/single"
-#     data = _.pick req, [
-#       'question'
-#       'journal'
-#       'entry'
-#     ]
-#     res.serve data
-#
-# router.route '/:id/journal/:entry_id/apply'
-#   .post approve('publish a question'), (req, res) ->
-#     req.entry.apply author: req.user.id, (error, question) ->
-#       res.redirect "/questions/#{question.id}"
+router.route '/:id/journal/:entry_id'
+  .get (req, res) ->
+    res.template = require "../templates/answers/single"
+    data = _.pick req, [
+      'answer'
+      'journal'
+      'entry'
+      'question'
+    ]
+    res.serve data
+
+router.route '/:id/journal/:entry_id/apply'
+  .post approve('publish an answer'), (req, res) ->
+    req.entry.apply author: req.user.id, (error, answer) ->
+      {
+        question
+      } = req
+      res.redirect "/questions/#{question.id}/answers/#{answer.id}"
 
 module.exports = router
