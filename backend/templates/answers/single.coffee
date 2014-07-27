@@ -20,7 +20,8 @@ module.exports = new View (data) ->
 
   unless answer.isNew
     author = entry?.data.author or answer.author
-    data.subtitle = @cede => @translate "%s answers: %s", author.name, question.text
+    data.title    = @cede => @translate "%s answers:", author.name
+    data.subtitle = question.text
 
   layout data, =>
     if entry?
