@@ -52,7 +52,7 @@ router.route '/'
     async.waterfall [
       # Check if this question is already answer by this author
       (done) ->
-        Answer.count author: user._id, done
+        Answer.count author: user._id, question: question._id, done
 
       (count, done) ->
         if count then return done new Error2
@@ -82,7 +82,7 @@ router.route '/'
     ],
       (error, draft) ->
         if error then return req.next error
-        res.redirect "/questions/#{draft.data.question}/answers/#{draft.data.id}/journal/#{draft.id}"
+        res.redirect "/questions/#{draft.data.question}/answers/#{draft.data._id}/journal/#{draft.id}"
 
 router.param 'id', (req, res, done, id) ->
   if not /^[0-9a-fA-F]{24}$/.test id then return done new Error2
