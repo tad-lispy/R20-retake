@@ -83,7 +83,7 @@ module.exports = (schema, options = {}) ->
       (response, status, done) ->
         done null, response.hits.hits.map (hit) ->
           document: hit._id
-          score   : hit.score
+          score   : hit._score
 
       (documents, done) =>
         @populate documents,
