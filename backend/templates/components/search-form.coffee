@@ -3,10 +3,12 @@ View = require "teacup-view"
 module.exports = new View (attributes) ->
   {
     query
+    action
   } = attributes
 
   @form
     method: "get"
+    action: action if action
     =>
       @div class: "input-group input-group-lg", =>
         @input

@@ -9,6 +9,6 @@ module.exports = new View (data) ->
   } = data
 
   layout data, =>
-    @searchForm { query }
+    @searchForm { query, action: '/search' }
     do @hr
     @newsFeed { entries }
