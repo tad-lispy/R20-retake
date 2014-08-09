@@ -7,12 +7,21 @@
 elasticsearch = require "elasticsearch"
 Error2        = require "error2"
 async         = require "async"
+URL           = require "url"
+_             = require "lodash"
+util          = require "util"
 
 config        = require "config-object"
 
-esconfig = config.get 'elasticsearch'
-esconfig.apiVersion = '1.2'
-es = new elasticsearch.Client esconfig
+# Prepare mongo servers list in a way digestive for ES mongo river
+mongoservers = config.get "mongo/url"
+mongoservers = [ mongoservers ] unless util.isArray mongoservers
+mongoservers = mongoservers.map (url) -> _.pick URL.parse(url), [
+  'host'
+  'port'
+]
+
+es = new elasticsearch.Client config.get 'elasticsearch'
 es.ping
   requestTimeout: 1000
   (error) -> if error then throw new Error2 "Elasticsearch is not reachable at #{config.get 'elasticsearch/host'}"
@@ -56,9 +65,7 @@ module.exports = (schema, options = {}) ->
       body  :
         type: "mongodb"
         mongodb:
-          servers: [
-            host: 'mongo' # TODO: smarter
-          ]
+          servers: mongoservers # See beggining of file
           db: "R20"
           collection: collection
         index:
