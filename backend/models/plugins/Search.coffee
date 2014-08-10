@@ -16,11 +16,13 @@ config        = require "config-object"
 # Prepare mongo servers list in a way digestive for ES mongo river
 mongoservers = config.get "mongo/url"
 mongoservers = [ mongoservers ] unless util.isArray mongoservers
-mongoservers = mongoservers.map (url) -> _.pick URL.parse(url), [
-  'host'
-  'port'
-]
-
+mongoservers = mongoservers.map (url) ->
+  url = URL.parse url
+  return {
+    host: url.hostname
+    port: url.port
+  }
+  
 es = new elasticsearch.Client config.get 'elasticsearch'
 es.ping
   requestTimeout: 1000
@@ -59,19 +61,21 @@ module.exports = (schema, options = {}) ->
       done
 
     # Recreate river
-    (response, status, done) -> es.transport.request
-      method: 'PUT'
-      path  : "_river/r20-#{collection}/_meta"
-      body  :
-        type: "mongodb"
-        mongodb:
-          servers: mongoservers # See beggining of file
-          db: "R20"
-          collection: collection
-        index:
-          name: "r20"
-          type: collection
-      done
+    (response, status, done) ->
+      console.log "Recreating river for", mongoservers
+      es.transport.request
+        method: 'PUT'
+        path  : "_river/r20-#{collection}/_meta"
+        body  :
+          type: "mongodb"
+          mongodb:
+            servers: mongoservers # See beggining of file
+            db: "R20"
+            collection: collection
+          index:
+            name: "r20"
+            type: collection
+        done
   ], (error) ->
     if error then throw error
 
