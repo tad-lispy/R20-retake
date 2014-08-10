@@ -1,0 +1,29 @@
+web:
+  build: .
+  ports:
+    - "3210:3210"
+  volumes:
+    - .:/app
+  links:
+    - mongo
+    - elasticsearch
+
+mongo:
+  image: mongo
+  command:  [
+    "mongod",
+    "--noprealloc",
+    "--smallfiles",
+    "--replSet",
+    "r20"
+  ]
+  hostname: 'mongo_1'
+  ports:
+    - 127.0.0.1:27017:27017
+
+elasticsearch:
+  image: lzrski/elasticsearch
+  ports:
+    - 127.0.0.1:9200:9200
+  links:
+    - mongo
