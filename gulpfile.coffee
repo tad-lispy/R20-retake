@@ -17,6 +17,9 @@ sources      =
     'backend/app.coffee'
     'backend/**/*.coffee'
   ]
+  messages  : [
+    'backend/**/*.md'
+  ]
   scripts    : [
     'frontend/scripts/index.coffee'
     'frontend/scripts/**/*.coffee'
@@ -33,6 +36,7 @@ sources      =
 
 destinations =
   backend    : 'build/backend'
+  messages   : 'build/backend'
   scripts    : 'build/frontend/scripts'
   styles     : 'build/frontend/styles'
 
@@ -76,6 +80,9 @@ gulp.task 'build', ['clean', 'scripts', 'styles'], ->
     .pipe coffee()
     .pipe gulp.dest destinations.backend
 
+  gulp
+    .src sources.messages
+    .pipe gulp.dest destinations.messages
 
 gulp.task 'watch', ->
   gulp.watch sources.backend, ['build']
