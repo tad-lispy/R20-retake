@@ -22,7 +22,7 @@ mongoservers = mongoservers.map (url) ->
     host: url.hostname
     port: url.port
   }
-  
+
 es = new elasticsearch.Client config.get 'elasticsearch'
 es.ping
   requestTimeout: 1000
@@ -62,7 +62,6 @@ module.exports = (schema, options = {}) ->
 
     # Recreate river
     (response, status, done) ->
-      console.log "Recreating river for", mongoservers
       es.transport.request
         method: 'PUT'
         path  : "_river/r20-#{collection}/_meta"
