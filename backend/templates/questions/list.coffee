@@ -26,7 +26,7 @@ module.exports = new View (data) ->
             type        : "text"
             name        : "search"
             class       : "form-control"
-            placeholder : @cede => @translate "Type to search or questions..."
+            placeholder : @cede => @translate "Type to search for questions..."
             value       : query.search
             data        :
               shortcut    : "/"

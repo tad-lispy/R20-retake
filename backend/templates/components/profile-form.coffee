@@ -33,7 +33,7 @@ module.exports = new View (options = {}) ->
             value       : participant.name
 
         @div class: "form-group", =>
-          @label for: "bio", => @translate "About"
+          @label for: "bio", => @translate "About %s", participant.name
           @textarea
             name        : "bio"
             class       : "form-control"

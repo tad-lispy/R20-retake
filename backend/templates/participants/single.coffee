@@ -38,7 +38,6 @@ module.exports = new View (data) ->
       title : @cede => @translate "Edit profile"
       id    : "profile-edit-dialog"
       =>
-        @p => @translate "What can you tell us about %s?", participant.name
         @profileForm {
           participant
           user
