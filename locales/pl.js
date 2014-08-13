@@ -55,8 +55,8 @@
 	"send": "wyślij",
 	"apply this draft": "opublikuj ten szkic",
 	"The case of %s": "Przypadek z dnia %s",
-	"remove story": "usuń opis przypdaku",
-	"Edit story": "Edytuj opis przypdaku",
+	"remove story": "usuń opis przypadku",
+	"Edit story": "Edytuj opis przypadku",
 	"Could it be told beter? Make changes if so.": "Można by to opowiedzieć lepiej? Nie krępuj się.",
 	"Drafts of this story": "Szkice tego opisu przypadku",
 	"Remove this story?": "Czy usunąć ten opis przypadku?",
@@ -109,5 +109,7 @@
 	"Type to search for questions...": "Szukaj zagadnień prawnych...",
 	"About %s": "%s - o sobie",
 	"Few words about you": "Napisz kilka słów o sobie...",
-	"Staff": "Redakcja"
+	"Staff": "Redakcja",
+	"Answer by %s": "%s odpowiada",
+	"Know the answer? Please share it...": "Znasz odpowiedź na to pytanie? Podziel się."
 }
