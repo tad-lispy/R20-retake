@@ -1,3 +1,1 @@
-Piękni, młodzi i wkrótce bogaci :)
-
-To my som.
+Radzimy.​co to stro­na in­ter­ne­to­wa two­rzo­na przez praw­ni­ków połączonych ideą podnoszenia świadomości prawnej społeczeństwa. W tym celu będziemy dzielić się naszą wiedzą i dostarczać Państwu bezpłatnych, rzetelnych i zrozumiałych odpowiedzi na pytania prawne.
