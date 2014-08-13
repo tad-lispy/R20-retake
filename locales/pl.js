@@ -108,5 +108,6 @@
 	"That's it": "Tak będzie dobrze",
 	"Type to search for questions...": "Szukaj zagadnień prawnych...",
 	"About %s": "%s - o sobie",
-	"Few words about you": "Napisz kilka słów o sobie..."
+	"Few words about you": "Napisz kilka słów o sobie...",
+	"Staff": "Redakcja"
 }

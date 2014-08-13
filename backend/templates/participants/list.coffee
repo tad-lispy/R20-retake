@@ -1,3 +1,5 @@
+# This view serves as "About us" page
+
 View      = require "teacup-view"
 fs        = require "fs"
 _         = require "lodash"
@@ -9,7 +11,7 @@ layout    = require "../layouts/default"
 text      = fs.readFileSync __dirname + '/about.md', 'utf-8'
 
 module.exports = new View (data) ->
-  data.subtitle = "About us"
+  data.subtitle = @cede => @translate "About us"
 
   {
     query
@@ -24,6 +26,10 @@ module.exports = new View (data) ->
 
 
     @div class: "row", =>
-      for participant in participants
+      @header class: "col-md-12", =>
+        @h2 => @translate "Staff"
+        do @hr
+
+      for participant in participants when 'editor' in participant.roles
         @div class: "col-md-4 col-sm-12", =>
           @profileBox {participant, show_auth: no}
