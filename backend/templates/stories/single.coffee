@@ -94,7 +94,7 @@ module.exports = new View (data) ->
           ,
             title : @cede => @translate "remove story"
             href  : "#remove"
-            icon  : "times-circle"
+            icon  : "trash-o"
             data  :
               toggle  : "modal"
               target  : "#remove-dialog"
@@ -155,7 +155,7 @@ module.exports = new View (data) ->
                   type  : "submit"
                   class : "btn btn-danger"
                   =>
-                    @i class: "fa fa-remove-sign fa-fw"
+                    @i class: "fa fa-trash-o fa-fw"
                     @translate "Remove!"
 
       # The questions
