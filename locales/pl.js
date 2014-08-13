@@ -109,5 +109,7 @@
 	"Type to search for questions...": "Szukaj zagadnień prawnych...",
 	"About %s": "%s - o sobie",
 	"Few words about you": "Napisz kilka słów o sobie...",
-	"Staff": "Redakcja"
+	"Staff": "Redakcja",
+	"Enter your legal question here.": "Wpisz tutaj swoje pytanie prawne.",
+	"e.g. Can I return a thing I bought on the Internet?": "np. Czy mogę zwrócić rzecz kupioną w Internecie?"
 }

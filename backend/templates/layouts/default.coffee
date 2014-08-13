@@ -86,6 +86,7 @@ module.exports = new View (options = {}, content) ->
           "//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.9.3/typeahead.min.js"
           "//cdnjs.cloudflare.com/ajax/libs/mousetrap/1.4.5/mousetrap.min.js"
           "/scripts/keyboard-shortcuts.js"
+          "/scripts/tutorials.js"
           "//cdn.jsdelivr.net/jquery.cookie/1.4.0/jquery.cookie.min.js"
           "https://login.persona.org/include.js"
           "/scripts/authenticate.js"
