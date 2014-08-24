@@ -111,5 +111,6 @@
 	"Few words about you": "Napisz kilka słów o sobie...",
 	"Staff": "Redakcja",
 	"Answer by %s": "%s odpowiada",
-	"Know the answer? Please share it...": "Znasz odpowiedź na to pytanie? Podziel się."
+	"Know the answer? Please share it...": "Znasz odpowiedź na to pytanie? Podziel się.",
+	"%s answers:": "%s odpowiada:"
 }
