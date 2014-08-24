@@ -23,7 +23,5 @@ mongo:
 
 elasticsearch:
   image: lzrski/elasticsearch
-  ports:
-    - 127.0.0.1:9200:9200
   links:
     - mongo

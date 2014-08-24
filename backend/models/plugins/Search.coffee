@@ -26,7 +26,7 @@ mongoservers = mongoservers.map (url) ->
 es = new elasticsearch.Client config.get 'elasticsearch'
 es.ping
   requestTimeout: 1000
-  (error) -> if error then throw new Error2 "Elasticsearch is not reachable at #{config.get 'elasticsearch/host'}"
+  (error) -> if error then throw new Error2 "Elasticsearch is not reachable at #{config.get 'elasticsearch/host' or config.get 'elasticsearch/hosts'}"
 
 
 module.exports = (schema, options = {}) ->
