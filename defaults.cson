@@ -13,7 +13,9 @@ mongo :
   url   : "mongodb://localhost/R20"
 
 elasticsearch:
-  host  : 'localhost:9200',
+  hosts : [
+    'localhost:9200'
+  ]
   log   : 'trace'
   apiVersion: '1.1'
 
