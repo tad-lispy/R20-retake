@@ -123,9 +123,55 @@ router.route '/:story_id/questions'
       if error then return req.next error
       res.redirect "/stories/#{req.story.id}"
 
+# Single question operations
+router.param 'question_id', (req, res, done, id) ->
+  if not /^[0-9a-fA-F]{24}$/.test id then return done new Error2
+    code: 422
+    name: 'Unprocessable Entity'
+    message: "#{id} is not a valid question identifier. Check your url."
+
+  req.question = _.find req.story.questions, {id}
+  if not req.question then return done new Error2
+    code: 404
+    name: 'Question not found'
+    message: "Question #{id} is not related to story #{req.story.id}. Please check your url."
+
+  done null
+
+  # async.waterfall [
+  #   (done) -> Question.findByIdOrCreate id, (error, question)
+  #     if error then return done error
+  #     req.question = question
+  #     do done
+  #
+  #   (done) ->
+  #     Answer.find question: req.question.id, done
+  #
+  #   (answers, done) -> story.findEntries action: 'draft', (error, journal) ->
+  #     # TODO: If story is new and no drafts then 404
+  #     done error, story, journal
+  #
+  #   (story, journal, done) -> Participant.populate journal,
+  #     path: 'meta.author'
+  #     (error, journal) ->
+  #       done error, story, journal
+  # ], (error, story, journal) ->
+  #     if error then return done error
+  #     req.story = story
+  #     req.journal = journal
+  #     done null
+
+
 router.route '/:story_id/questions/:question_id'
   .delete (req, res) ->
-    res.serve 'Remove a story-question link'
+    async.waterfall [
+      (done) ->
+        req.story.removeReference 'questions', req.question.id, author: req.user, done
+      (entry, done) ->
+        entry.apply author: req.user, done
+    ], (error) ->
+      if error then return req.next error
+      res.redirect "/stories/#{req.story.id}"
 
 # Journal operations
 # TODO: own router?

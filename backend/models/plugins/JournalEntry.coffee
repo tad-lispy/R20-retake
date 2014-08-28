@@ -108,6 +108,8 @@ Entry.method "apply", (meta, callback) ->
         main
         referenced
       }           = @data
+      # TODO: Allow referenced to be either instanceof ObjectID or Document
+      # referenced =  referenced.id unless referenced instanceof mongoose.Schema.ObjectID
 
       if reference.relation is "has many" then async.waterfall [
         (done) =>
