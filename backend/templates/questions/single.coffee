@@ -22,9 +22,10 @@ module.exports = new View (data) ->
 
 
   # TODO: if used as subtitle it shows twice on the page (as subtitle and in jumbotron)
-  # subtitle =  if draft? then draft.text else
-  #             if not question.isNew then question.text
-  # if subtitle then data.subtitle = subtitle
+  data.title =  if draft? then draft.text else
+                if not question.isNew then question.text
+
+  if data.title then data.subtitle = @cede => @translate "legal question at Radzimy.co"
 
   layout data, =>
     if entry?
