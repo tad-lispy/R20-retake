@@ -113,5 +113,7 @@
 	"Answer by %s": "%s odpowiada",
 	"Know the answer? Please share it...": "Znasz odpowiedź na to pytanie? Podziel się.",
 	"%s answers:": "%s odpowiada:",
-	"legal question at Radzimy.co": "pytanie prawne w Radzimy.co"
+	"legal question at Radzimy.co": "pytanie prawne w Radzimy.co",
+	"Unpublished question": "Nieopublikowane",
+	"Not published yet.": "Jeszcze nieopublikowane."
 }
