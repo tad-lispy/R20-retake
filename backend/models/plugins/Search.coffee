@@ -1,4 +1,4 @@
-# Search mongoose plugin
+  # Search mongoose plugin
 #
 # Extends Model with a static search method
 # uses elasticsearch.
@@ -13,10 +13,15 @@ util          = require "util"
 
 config        = require "config-object"
 
-# Prepare mongo servers list in a way digestive for ES mongo river
-mongoservers = config.get "mongo/url"
+# Try to read mongodb servers from river configuration.
+# Upon failure, try to guess them from mongo configuration.
+# The later is default behaviour.
+mongoservers = config.get "elasticsearch/river/mongo/servers" or config.get "mongo/url"
+
+# Normalize whatever we got from config
 mongoservers = [ mongoservers ] unless util.isArray mongoservers
 mongoservers = mongoservers.map (url) ->
+  if 'host' of url then return url
   url = URL.parse url
   return {
     host: url.hostname

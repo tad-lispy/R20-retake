@@ -1,29 +1,34 @@
-web:
-  build: .
-  ports:
-    - "3210:3210"
-  volumes:
-    - .:/app
-  links:
-    - mongo
-    - elasticsearch
-  command:
-    - 'npm'
-    - 'run-script'
-    - 'develop'
+# In development we only run data stores. Web stack will be ran directly on host.
+# web:
+#   build: .
+#   ports:
+#     - "3210:3210"
+#   volumes:
+#     - .:/app
+#   links:
+#     - mongo
+#     - elasticsearch
+#   command:
+#     - 'npm'
+#     - 'run-script'
+#     - 'develop'
 
 mongo:
   image: mongo
   command:
     - "mongod"
+    - "--smallfiles"
+    - "--noprealloc"
     - "--quiet"
     - "--replSet"
     - "r20"
   hostname: 'mongo_1'
   ports:
-    - 27017
+    - "27017:27017"
 
 elasticsearch:
   image: lzrski/elasticsearch
   links:
     - mongo
+  ports:
+    - "9200:9200"
