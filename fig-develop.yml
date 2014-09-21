@@ -7,16 +7,21 @@ web:
   links:
     - mongo
     - elasticsearch
+  command:
+    - 'npm'
+    - 'run-script'
+    - 'develop'
 
 mongo:
   image: mongo
-  command:  [
-    "mongod",
-    "--quiet",
-    "--replSet",
-    "r20"
-  ]
+  command:
+    - "mongod"
+    - "--quiet"
+    - "--replSet"
+    - "r20"
   hostname: 'mongo_1'
+  ports:
+    - 27017
 
 elasticsearch:
   image: lzrski/elasticsearch
