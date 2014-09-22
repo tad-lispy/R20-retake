@@ -34,9 +34,6 @@ router.route '/'
       (error, data) ->
         if error then return req.next error
         res.serve data
-    # Story.find (error, stories) ->
-    #   if error then req.next error
-    #   res.serve {stories}
 
   .post approve('tell a story'), (req, res) ->
     data = _.pick req.body, ['text']
@@ -137,30 +134,6 @@ router.param 'question_id', (req, res, done, id) ->
     message: "Question #{id} is not related to story #{req.story.id}. Please check your url."
 
   done null
-
-  # async.waterfall [
-  #   (done) -> Question.findByIdOrCreate id, (error, question)
-  #     if error then return done error
-  #     req.question = question
-  #     do done
-  #
-  #   (done) ->
-  #     Answer.find question: req.question.id, done
-  #
-  #   (answers, done) -> story.findEntries action: 'draft', (error, journal) ->
-  #     # TODO: If story is new and no drafts then 404
-  #     done error, story, journal
-  #
-  #   (story, journal, done) -> Participant.populate journal,
-  #     path: 'meta.author'
-  #     (error, journal) ->
-  #       done error, story, journal
-  # ], (error, story, journal) ->
-  #     if error then return done error
-  #     req.story = story
-  #     req.journal = journal
-  #     done null
-
 
 router.route '/:story_id/questions/:question_id'
   .delete (req, res) ->
