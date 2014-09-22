@@ -181,6 +181,7 @@ router.route '/:id/journal/:entry_id'
 router.route '/:id/journal/:entry_id/apply'
   .post approve('publish an answer'), (req, res) ->
     req.entry.apply author: req.user.id, (error, answer) ->
+      if error then return req.next error
       {
         question
       } = req

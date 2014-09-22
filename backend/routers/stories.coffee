@@ -193,6 +193,7 @@ router.route '/:story_id/journal/:entry_id'
 router.route '/:story_id/journal/:entry_id/apply'
   .post approve('publish a story'), (req, res) ->
     req.entry.apply author: req.user.id, (error, story) ->
+      if error then return req.next error
       res.redirect "/stories/#{story.id}"
 
 module.exports = router

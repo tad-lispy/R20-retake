@@ -148,6 +148,7 @@ router.route '/:id/journal/:entry_id'
 router.route '/:id/journal/:entry_id/apply'
   .post approve('publish a question'), (req, res) ->
     req.entry.apply author: req.user.id, (error, question) ->
+      if error then return req.next error
       res.redirect "/questions/#{question.id}"
 
 module.exports = router
