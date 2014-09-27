@@ -27,3 +27,9 @@ $ ->
           target.append item.removeClass "hide"
 
       do element.submit
+
+  $('#new-question-dialog').on 'show.bs.modal', (modal) ->
+    query = $('form[data-target="#assign-questions-list"] input[name="search"]').val()
+    $ modal.target
+      .find 'input[name=text]'
+      .val  query
