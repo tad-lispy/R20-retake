@@ -58,21 +58,23 @@ plugin = (schema, options = {}) ->
   schema.methods.saveDraft = (meta, callback) ->
     if not callback and typeof meta is "function" then callback = meta
 
-    draft = do @.toObject
-    model = @constructor.modelName
+    @validate (error) =>
+      if error then return callback error
 
+      draft = do @toObject
+      model = @constructor.modelName
 
-    # Don't store references and such.
-    draft = deepOmit draft, options.omit
+      # Don't store references and such.
+      draft = deepOmit draft, options.omit
 
-    entry = new Entry
-      action: "draft"
-      model : model
-      data  : draft
-      meta  : meta
+      entry = new Entry
+        action: "draft"
+        model : model
+        data  : draft
+        meta  : meta
 
-    entry.save (error) ->
-      callback error, entry
+      entry.save (error) ->
+        callback error, entry
 
   schema.static 'findUnpublished', (query, callback) ->
     # Find all documents that have drafts, but are not stored (i.e. published)

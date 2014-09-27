@@ -18,7 +18,7 @@ router.route '/'
 
     if req.query.search
       return Question.search req.query.search, (error, result) ->
-        if error then return done error
+        if error then return req.next error
         res.serve questions: result.map (hit) -> hit.document
 
     async.parallel
@@ -32,7 +32,7 @@ router.route '/'
     data = _.pick req.body, ['text']
     question = new Question data
     question.saveDraft author: req.user.id, (error, draft)->
-      if error then return done error
+      if error then return req.next error
       res.redirect "/questions/#{question.id}/journal/#{draft.id}"
 
 router.param 'id', (req, res, done, id) ->
@@ -114,7 +114,7 @@ router.route '/:id'
     { question } = req
     question.set data
     question.saveDraft author: req.user.id, (error, draft) ->
-      if error then return done error
+      if error then return req.next error
       res.redirect "/questions/#{question.id}/journal/#{draft.id}"
 
   .delete approve('unpublish a question'), (req, res) ->

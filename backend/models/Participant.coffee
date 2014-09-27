@@ -9,6 +9,7 @@ Participant  = new mongoose.Schema
     type      : String
     required  : yes
     default   : 'Anonymous'
+    trim      : yes
   roles     :
     type      : [ String ]
     default   : [ 'reader' ]
@@ -31,12 +32,17 @@ Participant  = new mongoose.Schema
     type      : [ String ]
     default   : []
   # TODO: validation (unique values, limit to set)
-  bio       : String
-  titles    : String
+  bio       :
+    type      : String
+    trim      : yes
+  titles    :
+    type      : String
+    trim      : yes
   email     :
     type      : String # TODO: validation (unique values, morphology)
     required  : yes
     unique    : yes
+    trim      : yes
     # validate  :
     #   validator : (emails) -> emails.length
     #   msg       : "At least one email required"

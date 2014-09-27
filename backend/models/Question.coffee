@@ -10,6 +10,7 @@ Question  = new mongoose.Schema
     type      : String
     required  : yes
     unique    : yes
+    trim      : yes
 
 Question.methods.findStories = (conditions, callback) ->
   if (not callback) and typeof conditions is "function"

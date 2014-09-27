@@ -6,6 +6,7 @@ _         = require "lodash"
 Story = new mongoose.Schema
   text        :
     type        : String
+    trim        : yes
     required    : yes
   questions : [
     type      : mongoose.Schema.ObjectId

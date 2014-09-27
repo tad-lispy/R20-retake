@@ -7,6 +7,7 @@ answer      = new mongoose.Schema
   text        :
     type        : String
     required    : yes
+    trim        : yes
   author      :
     type        : mongoose.Schema.ObjectId
     ref         : 'Participant'

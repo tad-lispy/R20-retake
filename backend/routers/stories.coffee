@@ -39,7 +39,7 @@ router.route '/'
     data = _.pick req.body, ['text']
     story = new Story data
     story.saveDraft author: req.user.id, (error, draft)->
-      if error then return done error
+      if error then return req.next error
       res.redirect "/stories/#{story.id}/journal/#{draft.id}"
 
 router.param 'story_id', (req, res, done, id) ->
