@@ -37,13 +37,12 @@ module.exports = new View (data) ->
       if entry
         @markdown entry.data.text
 
-        @form
+        if user?.can 'publish a story' then @form
           action: "/stories/#{story.id}/journal/#{entry.id}/apply"
           method: "POST"
           class : "clearfix"
           =>
             @input type: "hidden", name: "_csrf"    , value: csrf
-            @input type: "hidden", name: "_draft"   , value: entry._id
 
             @div class: "btn-group pull-right", =>
               @button
@@ -64,6 +63,34 @@ module.exports = new View (data) ->
                   target  : "#story-edit-dialog"
                   shortcut: "e"
               ]
+
+        else if user?.can 'review drafts of stories' then @form
+          action: "/stories/#{story.id}/journal/#{entry.id}/approve"
+          method: "POST"
+          class : "clearfix"
+          =>
+            @input type: "hidden", name: "_csrf"    , value: csrf
+
+            @div class: "btn-group pull-right", =>
+              @button
+                class   : "btn btn-success"
+                type    : "submit"
+                disabled: applied
+                data    : shortcut: "a a enter"
+                =>
+                  @i class: "fa fa-fw fa-check"
+                  @translate "approve this draft"
+
+              @dropdown items: [
+                title : @cede => @translate "make changes"
+                href  : "#edit-story"
+                icon  : "edit"
+                data  :
+                  toggle  : "modal"
+                  target  : "#story-edit-dialog"
+                  shortcut: "e"
+              ]
+
 
       else if story.isNew
         @p class: "text-muted", =>
@@ -128,7 +155,7 @@ module.exports = new View (data) ->
         root    : "/stories/"
 
     else
-      @modal
+      if user?.can 'review drafts of a stories' then @modal
         title : @cede => @translate "Drafts of this story"
         id    : "drafts-dialog"
         =>
@@ -138,7 +165,7 @@ module.exports = new View (data) ->
             chosen  : entry?._id
             root    : "/stories/"
 
-      @modal
+      if user?.can 'remove a story' then @modal
         title : @cede => @translate "Remove this story?"
         id    : "remove-dialog"
         class : "modal-danger"
@@ -169,7 +196,7 @@ module.exports = new View (data) ->
             class: "panel-title"
             => @translate "Legal questions abstracted from this story"
 
-          @div class: "btn-group pull-right", =>
+          if user?.can 'assign question to a story' then @div class: "btn-group pull-right", =>
             @button
               type  : "button"
               class : "btn btn-default btn-xs"
@@ -181,7 +208,7 @@ module.exports = new View (data) ->
                 @i class: "fa fa-fw fa-link"
                 @translate "assign"
 
-        @div
+        if user?.can 'assign question to a story' then @div
           class : "panel-body collapse"
           id    : "assignment-list"
           =>
@@ -299,7 +326,7 @@ module.exports = new View (data) ->
                 @i class: "fa fa-fw fa-plus-circle"
                 @translate "Do it now!"
 
-      @modal
+      if user?.can 'suggest a new question' then @modal
         id      : "new-question-dialog"
         title   : @cede => @translate "Add new question"
         =>

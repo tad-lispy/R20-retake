@@ -18,7 +18,7 @@
 	"ok": "ok",
 	"What seems to be the problem?": "W czym możemy pomóc?",
 	"unknown author": "nieznany autor",
-	"This is a draft proposed %s by %s.": "To jest szkic, który %s zaproponował %s.",
+	"This is a draft proposed %s by %s.": "To jest szkic, który %s zaproponował(a) %s.",
 	"See actual answer": "Zobacz obecnie opublikowaną odpowiedź",
 	"What's the correct answer?": "Jaka jest poprawna odpowiedź?",
 	"Here goes some serious legal knowledge...": "Miejsce na twoją jurysprudencję...",
@@ -113,5 +113,8 @@
 	"Answer by %s": "%s odpowiada",
 	"Know the answer? Please share it...": "Znasz odpowiedź na to pytanie? Podziel się.",
 	"%s answers:": "%s odpowiada:",
-	"Not published yet.": "Jeszcze nie opublikowano."
+	"Not published yet.": "Jeszcze nie opublikowano.",
+	"Feel like you belong to one of theese roles?": "Należysz do jednej z tych grup?",
+	"Contact us to get invitation.": "Skontaktuj się z redakcją aby uzyskać dodatkowe uprawnienia.",
+	"approve this draft": "udziel poparcia temu szkicowi"
 }
