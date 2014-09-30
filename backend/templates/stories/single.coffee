@@ -155,7 +155,7 @@ module.exports = new View (data) ->
         root    : "/stories/"
 
     else
-      if user?.can 'review drafts of a stories' then @modal
+      if user?.can 'review drafts of stories' then @modal
         title : @cede => @translate "Drafts of this story"
         id    : "drafts-dialog"
         =>
