@@ -19,7 +19,8 @@ module.exports = new View (options = {}) ->
       author?.name or @cede => @translate "unknown author"
 
     if applied
-      @text " " + "It is currently applied."
+      @text " "
+      @translate "It is currently applied."
 
     @a
       href  : actualurl

@@ -116,5 +116,6 @@
 	"Not published yet.": "Jeszcze nie opublikowano.",
 	"Feel like you belong to one of theese roles?": "Należysz do jednej z tych grup?",
 	"Contact us to get invitation.": "Skontaktuj się z redakcją aby uzyskać dodatkowe uprawnienia.",
-	"approve this draft": "udziel poparcia temu szkicowi"
+	"approve this draft": "udziel poparcia temu szkicowi",
+	"It is currently applied.": "Jest on obecnie opublikowany."
 }
