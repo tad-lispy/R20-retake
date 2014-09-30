@@ -132,7 +132,7 @@ module.exports = new View (data) ->
 
             @dropdown { items }
 
-    unless story.isNew and not entry?
+    if user?.can 'review drafts of stories' then unless story.isNew and not entry?
       @modal
         title : @cede => @translate "Edit story"
         id    : "story-edit-dialog"
