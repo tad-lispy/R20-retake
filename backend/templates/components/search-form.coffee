@@ -10,17 +10,21 @@ module.exports = new View (attributes) ->
     method: "get"
     action: action if action
     =>
-      @div class: "input-group input-group-lg", =>
-        @input
-          type        : "query"
-          class       : "form-control"
-          placeholder : @cede => @translate "What seems to be the problem?"
+      @div class: "form-group", =>
+        @textarea
+          id          : "search"
+          type        : "text"
           name        : "search"
+          class       : "form-control input-lg"
+          placeholder : @cede => @translate "What seems to be the problem?"
           value       : query.search
           data        :
             shortcut    : "/"
-        @span class: "input-group-btn", =>
-          @button
-            class     : "btn btn-primary"
-            type      : "submit"
-            => @i class: "fa fa-question-circle"
+
+      @div class: "form-group", =>
+        @button
+          class : "btn btn-primary btn-block btn-lg"
+          type  : "submit"
+          =>
+            @i class: "fa fa-fw fa-question-circle"
+            @translate "Search"

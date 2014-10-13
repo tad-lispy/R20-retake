@@ -42,9 +42,14 @@ module.exports = new View (options = {}, content) ->
         @div class: "container", id: "content", =>
           @header class : "page-header", =>
             @h1 =>
-              @raw title + " "
-              @br class: "visible-xs visible-sm"
-              @small => @raw subtitle
+              @img
+                class : 'logo'
+                src   : '/responsa-eu.svg'
+                alt   : title + ' | ' + subtitle
+              @span class: 'sr-only', =>
+                @raw title + " "
+                @br class: "visible-xs visible-sm"
+                @small => @raw subtitle
 
           @div class: "row", =>
             @tag "main", class: "col-xs-12 col-sm-9", =>

@@ -28,6 +28,9 @@ sources      =
     'frontend/styles/R20.styl'
     'frontend/styles/**/*.styl'
   ]
+  assets     : [
+    'frontend/assets/**/*'
+  ]
   test       : 'test/**/*.coffee'
   config     : [
     '*.cson'
@@ -35,10 +38,11 @@ sources      =
   ]
 
 destinations =
-  backend    : 'build/backend'
-  messages   : 'build/backend'
-  scripts    : 'build/frontend/scripts'
-  styles     : 'build/frontend/styles'
+  backend     : 'build/backend'
+  messages    : 'build/backend'
+  scripts     : 'build/frontend/scripts'
+  styles      : 'build/frontend/styles'
+  assets      : 'build/frontend/'
 
 scripts    = []
 
@@ -73,8 +77,15 @@ gulp.task 'styles', ->
 gulp.task 'watch-styles', ['styles'], ->
   gulp.watch sources.styles, ['styles']
 
+gulp.task 'assets', ->
+  gulp.src sources.assets
+    .pipe gulp.dest destinations.assets
 
-gulp.task 'build', ['clean', 'scripts', 'styles'], ->
+gulp.task 'watch-assets', ['assets'], ->
+  gulp.watch sources.assets, ['assets']
+
+
+gulp.task 'build', ['clean', 'scripts', 'styles', 'assets'], ->
   gulp
     .src sources.backend
     .pipe coffee()
@@ -97,7 +108,7 @@ gulp.task 'test', ->
       compilers : 'coffee:coffee-script'
       reporter  : 'spec'
 
-gulp.task 'develop', ['watch-scripts', 'watch-styles'], ->
+gulp.task 'develop', ['watch-scripts', 'watch-styles', 'watch-assets'], ->
   script = nodemon
     script: sources.backend[0]
     watch : sources.backend
