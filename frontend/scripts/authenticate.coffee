@@ -8,5 +8,4 @@ jQuery ($) ->
   $('.browserid.login.btn').click ->
     navigator.id.get verify,
       siteName: $('body').data 'title'
-      siteLogo: if window.location.protocol is 'https:'
-        $('img.logo').attr('src') 
+      siteLogo: '/icon-large.svg' if window.location.protocol is 'https:'
