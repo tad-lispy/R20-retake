@@ -38,63 +38,70 @@ module.exports = new View (options = {}, content) ->
           "/styles/R20.css"
         ]
 
-      @body data: { csrf }, class: (classes.join " "), =>
-        @div class: "container", id: "content", =>
-          @header class : "page-header", =>
-            @h1 =>
-              @img
-                class : 'logo'
-                src   : '/responsa-eu.svg'
-                alt   : title + ' | ' + subtitle
-              @span class: 'sr-only', =>
-                @raw title + " "
-                @br class: "visible-xs visible-sm"
-                @small => @raw subtitle
+      @body
+        data: {
+          csrf
+          title
+          subtitle
+        }
+        class: (classes.join " ")
+        =>
+          @div class: "container", id: "content", =>
+            @header class : "page-header", =>
+              @h1 =>
+                @img
+                  class : 'logo'
+                  src   : '/responsa-eu.svg'
+                  alt   : title + ' | ' + subtitle
+                @span class: 'sr-only', =>
+                  @raw title + " "
+                  @br class: "visible-xs visible-sm"
+                  @small => @raw subtitle
 
-          @div class: "row", =>
-            @tag "main", class: "col-xs-12 col-sm-9", =>
-              do content
+            @div class: "row", =>
+              @tag "main", class: "col-xs-12 col-sm-9", =>
+                do content
 
-            @aside
-              id    : "sidebar"
-              class : "col-xs-12 col-sm-3"
-              =>
-                do @navigation
-                @profileBox participant: user
+              @aside
+                id    : "sidebar"
+                class : "col-xs-12 col-sm-3"
+                =>
+                  do @navigation
+                  @profileBox participant: user
 
-        @footer class: "container", =>
-          @small =>
-            @i class: "fa fa-bolt"
-            @text " powered by "
-            @a
-              href  : config.repo
-              target: "_blank"
-              config.name
-            @text " v. #{config.version}. "
-            do @wbr
-            @text "#{config.name} is "
-            @a
-              href: "/license",
-              "a free software"
-            @text " by "
-            # TODO: split config.author into fields (a'la R20-legacy)
-            @a href: '#', "Good People of CLIT"
-            # @a href: config.author?.website, settings.author?.name
-            @text ". "
-            do @wbr
-            @text "Thank you :)"
+          @footer class: "container", =>
+            @small =>
+              @i class: "fa fa-bolt"
+              @text " powered by "
+              @a
+                href  : config.repo
+                target: "_blank"
+                config.name
+              @text " v. #{config.version}. "
+              do @wbr
+              @text "#{config.name} is "
+              @a
+                href: "/license",
+                "a free software"
+              @text " by "
+              # TODO: split config.author into fields (a'la R20-legacy)
+              @a href: '#', "Good People of CLIT"
+              # @a href: config.author?.website, settings.author?.name
+              @text ". "
+              do @wbr
+              @text "Thank you :)"
 
-        # views and controllers can set @styles and @scripts to be appended here
-        @script type: "text/javascript", src: url for url in [
-          "//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
-          "//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"
-          "//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.9.3/typeahead.min.js"
-          "//cdnjs.cloudflare.com/ajax/libs/mousetrap/1.4.5/mousetrap.min.js"
-          "/scripts/keyboard-shortcuts.js"
-          "//cdn.jsdelivr.net/jquery.cookie/1.4.0/jquery.cookie.min.js"
-          "https://login.persona.org/include.js"
-          "/scripts/authenticate.js"
-          "/scripts/modals.js"
-        ].concat scripts or []
+          # views and controllers can set @styles and @scripts to be appended here
+          @script type: "text/javascript", src: url for url in [
+            "//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
+            "//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"
+            "//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.9.3/typeahead.min.js"
+            "//cdnjs.cloudflare.com/ajax/libs/mousetrap/1.4.5/mousetrap.min.js"
+            "/scripts/keyboard-shortcuts.js"
+            "//cdn.jsdelivr.net/jquery.cookie/1.4.0/jquery.cookie.min.js"
+            "https://login.persona.org/include.js"
+            "/scripts/authenticate.js"
+            "/scripts/modals.js"
+          ].concat scripts or []
 
-        if styles? then @link rel: "stylesheet", href: url for url in styles
+          if styles? then @link rel: "stylesheet", href: url for url in styles
