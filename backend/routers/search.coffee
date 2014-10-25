@@ -15,14 +15,9 @@ Participant = require "../models/Participant"
 router.route '/'
 
   .get (req, res) ->
-    res.template = require '../templates/questions/list'
+    res.template = require '../templates/search/results'
 
     if not req.query.search then return res.redirect '/'
-
-    # TODO: take stories into account.
-    # We search for questions only, but ... todo
-    # Do the search on questions and stories
-    # then for each matching story add 1/10 of it's score to every question abstracted from that story
 
     async.parallel
       questions: (done) -> Question.search req.query.search, done

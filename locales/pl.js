@@ -113,5 +113,7 @@
 	"Answer by %s": "%s odpowiada",
 	"Know the answer? Please share it...": "Znasz odpowiedź na to pytanie? Podziel się.",
 	"%s answers:": "%s odpowiada:",
-	"Not published yet.": "Jeszcze nie opublikowano."
+	"Not published yet.": "Jeszcze nie opublikowano.",
+	"Legal questions matching your query": "Legal questions matching your query",
+	"No matching questions found.": "No matching questions found."
 }
