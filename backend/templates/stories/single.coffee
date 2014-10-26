@@ -10,6 +10,7 @@ module.exports = new View (data) ->
     entry
     csrf
     query
+    user
   } = data
   data.classes  ?=                []
   data.classes.push               "story"
@@ -19,90 +20,66 @@ module.exports = new View (data) ->
   data.subtitle = @cede => @translate "The case of %s", moment(story._id.getTimestamp()).format 'LL'
 
   layout data, =>
-    data.scripts.push "/scripts/assign-question.js"
-    data.scripts.push "//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.45/jquery.form.min.js"
-
-
-    if entry?
-      applied  = Boolean story._draft?.equals entry._id
-
-      @draftAlert
-        applied   : applied
-        draft     : entry
-        actualurl : "/stories/#{story._id}"
+    data.scripts.concat [
+      "/scripts/assign-question.js"
+      "//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.45/jquery.form.min.js"
+    ]
 
     # The story
-    @div class: "jumbotron", =>
-      if entry
-        @markdown entry.data.text
+    if story.isNew
+      @div class: 'alert alert-info', =>
+        @i class: "fa fa-fw fa-info-circle"
+        @translate "Not published yet"
 
-        @form
-          action: "/stories/#{story.id}/journal/#{entry.id}/apply"
-          method: "POST"
-          class : "clearfix"
-          =>
-            @input type: "hidden", name: "_csrf"    , value: csrf
-            @input type: "hidden", name: "_draft"   , value: entry._id
+      @h4 class: "text-muted", =>
+        @i class: "fa fa-clock-o fa-fw"
+        @translate "Versions"
+      @draftsTable
+        drafts  : journal.filter (entry) -> entry.action is "draft"
+        applied : story?._draft
+        root    : "/stories/"
 
-            @div class: "btn-group pull-right", =>
-              @button
-                class   : "btn btn-success"
-                type    : "submit"
-                disabled: applied
-                data    : shortcut: "a a enter"
-                =>
-                  @i class: "fa fa-fw fa-check-square"
-                  @translate "apply this draft"
-
-              @dropdown items: [
-                title : @cede => @translate "make changes"
-                href  : "#edit-story"
-                icon  : "edit"
-                data  :
-                  toggle  : "modal"
-                  target  : "#story-edit-dialog"
-                  shortcut: "e"
-              ]
-
-      else if story.isNew
-        @p class: "text-muted", =>
-          @i class: "fa fa-fw fa-info-circle"
-          @translate "Not published yet"
-
-      else
+    else
+      @div class: "jumbotron", =>
         @markdown story.text
 
-        @div class: "clearfix", => @div class: "btn-group pull-right", =>
-          @button
-            class: "btn btn-default"
-            data:
-              toggle  : "modal"
-              target  : "#story-edit-dialog"
-              shortcut: "e"
-            =>
-              @i class: "fa fa-edit fa-fw"
-              @translate "make changes"
+        ###
+        Technically it's enough to have 'tell a story' capability to view or to post a draft, but we do not expose this functions to readers. If they know an URL then ok, but there is no need to display buttons to them.
+        ###
+        if user?.can 'review drafts of a story' then @div class: "clearfix", =>
+          @div class: "btn-group pull-right", =>
+            @button
+              class: "btn btn-default"
+              data:
+                toggle  : "modal"
+                target  : "#story-edit-dialog"
+                shortcut: "e"
+              =>
+                @i class: "fa fa-edit fa-fw"
+                @translate "make changes"
 
-          @dropdown items: [
-            title : @cede => @translate "show drafts"
-            href  : "#show-drafts"
-            icon  : "folder"
-            data  :
-              toggle  : "modal"
-              target  : "#drafts-dialog"
-              shortcut: "d"
-          ,
-            title : @cede => @translate "remove story"
-            href  : "#remove"
-            icon  : "trash-o"
-            data  :
-              toggle  : "modal"
-              target  : "#remove-dialog"
-              shortcut: "del enter"
-          ]
+            items = [
+              title : @cede => @translate "show drafts"
+              href  : "#show-drafts"
+              icon  : "folder"
+              data  :
+                toggle  : "modal"
+                target  : "#drafts-dialog"
+                shortcut: "d"
+            ]
+            # TODO: Consider: If can publish then can remove - right?
+            if user?.can 'publish a story' then items.push
+              title : @cede => @translate "remove story"
+              href  : "#remove"
+              icon  : "trash-o"
+              data  :
+                toggle  : "modal"
+                target  : "#remove-dialog"
+                shortcut: "del enter"
 
-    unless story.isNew and not entry?
-      @modal
+            @dropdown {items}
+
+      if user?.can 'review drafts of a story' then @modal
         title : @cede => @translate "Edit story"
         id    : "story-edit-dialog"
         =>
@@ -110,21 +87,10 @@ module.exports = new View (data) ->
           @storyForm
             method  : "POST"
             action  : "/stories/#{story._id}"
-            story   : entry?.data or story
+            story   : story
             csrf    : csrf
 
-    if entry? or story.isNew
-      @h4 class: "text-muted", =>
-        @i class: "fa fa-clock-o fa-fw"
-        @translate "Versions"
-      @draftsTable
-        drafts  : journal.filter (entry) -> entry.action is "draft"
-        applied : story?._draft
-        chosen  : entry?._id
-        root    : "/stories/"
-
-    else
-      @modal
+      if user?.can 'review drafts of a story' then @modal
         title : @cede => @translate "Drafts of this story"
         id    : "drafts-dialog"
         =>
@@ -134,7 +100,7 @@ module.exports = new View (data) ->
             chosen  : entry?._id
             root    : "/stories/"
 
-      @modal
+      if user?.can 'remove a story' then @modal
         title : @cede => @translate "Remove this story?"
         id    : "remove-dialog"
         class : "modal-danger"
@@ -159,6 +125,8 @@ module.exports = new View (data) ->
                     @translate "Remove!"
 
       # The questions
+      # TODO: move to own module
+
       @div class: "panel panel-primary", =>
         @div class: "panel-heading", =>
           @strong

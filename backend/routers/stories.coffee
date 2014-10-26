@@ -155,7 +155,7 @@ router.route '/:story_id/journal'
 
 router.route '/:story_id/journal/:entry_id'
   .get (req, res) ->
-    res.template = require "../templates/stories/single"
+    res.template = require "../templates/stories/draft"
     data = _.pick req, [
       'story'
       'journal'

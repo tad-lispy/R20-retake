@@ -24,7 +24,7 @@
 	"Here goes some serious legal knowledge...": "Miejsce na twoją jurysprudencję...",
 	"%s answers: %s": "%s odpowiada: %s",
 	"Back to question": "Wróć do zagadnienia",
-	"make changes": "zaproponuj poprawki",
+	"make changes": "popraw",
 	"remove answer": "usuń odpowiedź",
 	"Remove this answer?": "Czy usunąć tę odpowiedź?",
 	"Removing an answer is roughly equivalent to unpublishing it. It can be undone. All drafts will be preserved.": "Usunięcie odpowiedź oznacza cofnięcie jej z listy odpowidzi opublikowanych. Ta operacja może zostać cofnięte. Wszystkie szkice zostaną zachowane.",
@@ -115,5 +115,12 @@
 	"%s answers:": "%s odpowiada:",
 	"Not published yet.": "Jeszcze nie opublikowano.",
 	"Legal questions matching your query": "Legal questions matching your query",
-	"No matching questions found.": "No matching questions found."
+	"No matching questions found.": "No matching questions found.",
+	"Roles in Responsa.eu": "Roles in Responsa.eu",
+	"Feel like you belong to one of theese roles?": "Feel like you belong to one of theese roles?",
+	"Contact us to get invitation.": "Contact us to get invitation.",
+	"Draft of a case provided on %s": "Szkic opisu przypadku z %s",
+	"approve this draft": "zgłoś do publikacji",
+	"You are not logged in. Please do it in order to edit or approve this draft.": "Zaloguj się proszę aby edytować ten szkic lub zgłosić go do pulblikacji.",
+	"Draft approval": "Draft approval"
 }
