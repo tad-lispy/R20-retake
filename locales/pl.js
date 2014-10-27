@@ -116,11 +116,15 @@
 	"Not published yet.": "Jeszcze nie opublikowano.",
 	"Legal questions matching your query": "Legal questions matching your query",
 	"No matching questions found.": "No matching questions found.",
-	"Roles in Responsa.eu": "Roles in Responsa.eu",
+	"Roles in Responsa.eu": "Role w serwisie Responsa.eu",
 	"Feel like you belong to one of theese roles?": "Feel like you belong to one of theese roles?",
 	"Contact us to get invitation.": "Contact us to get invitation.",
 	"Draft of a case provided on %s": "Szkic opisu przypadku z %s",
 	"approve this draft": "zgłoś do publikacji",
 	"You are not logged in. Please do it in order to edit or approve this draft.": "Zaloguj się proszę aby edytować ten szkic lub zgłosić go do pulblikacji.",
-	"Draft approval": "Draft approval"
+	"Approve this draft": "Zgłoś ten szkic do publikacji",
+	"Draft approval: story %s / %s": "Zgłoszenie szkicu do publikacji: opis przypadku %s / %s",
+	"send an e-mail": "wyślij wiadomość",
+	"Please consider publishing draft of a story at: %s": "Proszę o rozważenie publikacji szkicu pod adresem: %s",
+	"We are working on an automatic draft approval process. In the mean time please sent us an e-mail to `%s`. Please remember to include this drafts address, i.e. `%s`. Thank you and sorry for this inconvenience.": "Pracujemy nad automatycznym systemem powiadamiania dla zgłaszanych opisów przypadku. Tymczasem prosimy o przesłanie nam mailem na adres `%s` adresu URL zgłaszanego szkicu (tj. `%s`). Dziękujemy i przepraszamy :)"
 }

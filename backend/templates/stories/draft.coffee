@@ -99,8 +99,11 @@ module.exports = new View (data) ->
             @a
               class   : "btn btn-success"
               disabled: applied
-              href    : "mailto:#{config.site.email}?title=#{@cede => @translate 'Draft approval'}"
-              data    : shortcut: "a a enter"
+              href    : "#approve"
+              data  :
+                toggle  : "modal"
+                target  : "#approve-draft-dialog"
+                shortcut: "a a enter"
               =>
                 @i class: "fa fa-fw fa-check-square"
                 @translate "approve this draft"
@@ -135,3 +138,27 @@ module.exports = new View (data) ->
           action  : "/stories/#{story._id}"
           story   : entry?.data
           csrf    : csrf
+
+    if user?.can 'tell a story' then @modal
+      title : @cede => @translate "Approve this draft"
+      id    : "approve-draft-dialog"
+      =>
+        subject = @cede => @translate 'Draft approval: story %s / %s',
+          story._id,
+          entry._id
+
+        url  = "/stories/#{story._id}/journal/#{entry._id}"
+        body = @cede => @translate 'Please consider publishing draft of a story at: %s', url
+
+        @markdown @cede => @translate "We are working on an automatic draft approval process. In the mean time please sent us an e-mail to `%s`. Please remember to include this drafts address, i.e. `%s`. Thank you and sorry for this inconvenience.",
+          config.site.email
+          url
+
+
+
+        @a
+          class : "btn btn-primary btn-lg"
+          href  : "mailto:#{config.site.email}?subject=#{subject}&body=#{body}"
+          =>
+            @i class: "fa fa-fw fa-envelope"
+            @translate "send an e-mail"
