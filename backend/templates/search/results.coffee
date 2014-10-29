@@ -40,19 +40,20 @@ module.exports = new View (data) ->
 
     do @hr
 
-    if questions.length
+    if questions.length then @div class: "row", =>
       for question in questions
-        @div class: "panel panel-default", =>
-          @a href: "/questions/#{question._id}", class: "panel-body list-group-item lead", =>
-            @markdown question.text
-          @div class: "panel-footer", =>
-            if question.answers?.length
-              @ul class: "list-inline", =>
-                @strong => @translate "%d answers by:", question.answers.length
-                for answer in question.answers
-                  @li => @a href: "/questions/#{question._id}/##{answer._id}", answer.author?.name or @cede => @translate "unknown author"
+        @div class: "col-lg-4 col-md-6 col-sm-12", =>
+          @div class: "panel panel-default search-result", =>
+            @a href: "/questions/#{question._id}", class: "panel-body list-group-item lead", =>
+              @markdown question.text
+            @div class: "panel-footer", =>
+              if question.answers?.length
+                @ul class: "list-inline", =>
+                  @strong => @translate "%d answers by:", question.answers.length
+                  for answer in question.answers
+                    @li => @a href: "/questions/#{question._id}/##{answer._id}", answer.author?.name or @cede => @translate "unknown author"
 
-            else @strong => @translate "No answers yet."
+              else @strong => @translate "No answers yet."
 
     else @div class: "alert alert-info", => @translate "No matching questions found."
 
