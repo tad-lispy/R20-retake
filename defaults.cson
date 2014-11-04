@@ -27,6 +27,7 @@ participants:
     reader:
       can   : [
         'tell a story'
+        'publish a story' # Liberal experiment :)
       ]
     student:
       as     : 'reader'

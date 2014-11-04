@@ -42,14 +42,18 @@ module.exports = new View (data) ->
 
     if questions.length then @div class: "row", =>
       for question in questions
-        @div class: "col-lg-4 col-md-6 col-sm-12", =>
+        @div class: "col-sm-12", =>
           @div class: "panel panel-default search-result", =>
-            @a href: "/questions/#{question._id}", class: "panel-body list-group-item lead", =>
-              @markdown question.text
-            @div class: "panel-footer", =>
+            @div class: "panel-body", =>
+              @a
+                href: "/questions/#{question._id}"
+                class: "lead"
+                => @markdown question.text
+
               if question.answers?.length
-                @ul class: "list-inline", =>
-                  @strong => @translate "%d answers by:", question.answers.length
+                @ul class: "list-inline small", =>
+                  @strong => @translate "%d answers by:",
+                    question.answers.length
                   for answer in question.answers
                     @li => @a href: "/questions/#{question._id}/##{answer._id}", answer.author?.name or @cede => @translate "unknown author"
 

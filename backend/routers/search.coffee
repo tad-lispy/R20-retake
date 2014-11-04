@@ -24,7 +24,7 @@ router.route '/'
       stories  : (done) -> Story.search    req.query.search, done
       (error, data) ->
         if error then return req.next error
-        # console.dir data
+
         # Group questions by id
         questions = {}
         questions[question.document._id] = question for question in data.questions
@@ -42,12 +42,30 @@ router.route '/'
                 questions[question._id].score += score
               else
                 # setting new question as a result item
-                console.dir {question}
                 questions[question._id] =
                   document: question
                   score   : score
 
-
-          res.serve questions: (question.document for own id, question of questions)
+          ### TODO:
+          * Sort by score
+          * Limit to 10
+          * Populate with answers
+          ###
+          console.dir questions
+          questions = _(questions)
+            .values()
+            .sort 'score'
+            .first 9
+            .pluck 'document'
+            .value()
+          async.each questions,
+            (question, done) ->
+              question.findAnswers (error, answers) ->
+                if error then return done error
+                question.answers = answers
+                do done
+            (error) ->
+              if error then return req.next error
+              res.serve {questions}
 
 module.exports = router
