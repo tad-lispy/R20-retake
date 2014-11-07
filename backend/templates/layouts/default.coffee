@@ -70,6 +70,13 @@ module.exports = new View (options = {}, content) ->
                   @profileBox participant: user
 
           @footer class: "container", =>
+            if user?.can 'recreate search index' then @form
+                action: '/search/reindex'
+                method: 'POST'
+                => @button class: 'btn btn-link btn-sm', 'Reindex'
+
+            do @hr
+
             @small =>
               @i class: "fa fa-bolt"
               @text " powered by "

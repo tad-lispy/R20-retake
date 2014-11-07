@@ -13,7 +13,6 @@ Participant = require "../models/Participant"
 
 # List of questions operations
 router.route '/'
-
   .get (req, res) ->
     res.template = require '../templates/search/results'
 
@@ -61,5 +60,16 @@ router.route '/'
             (error) ->
               if error then return req.next error
               res.serve {questions}
+
+router.route '/reindex'
+  .post approve('recreate search index'), (req, res) ->
+    async.each [
+      Story
+      Question
+    ],
+      (model, done) -> model.reindex done
+      (error) ->
+        if error then return req.next error
+        res.redirect '/search'
 
 module.exports = router

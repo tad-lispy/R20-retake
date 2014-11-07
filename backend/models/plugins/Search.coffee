@@ -45,10 +45,13 @@ module.exports = (schema, options = {}) ->
         es.deleteByQuery
           index : 'r20'
           type  : collection
-        (error) -> done error
-      (done) ->
+          body  : query: match_all: {}
+          (error) -> done error
+      (done) =>
+        console.log "Looging for #{collection}"
         @find done
       (documents, done) ->
+        console.log "Indexing #{documents.length} #{collection}"
         async.eachLimit documents, 16, (document, done) ->
           es.index
             index : 'r20'
