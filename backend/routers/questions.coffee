@@ -22,7 +22,18 @@ router.route '/'
         res.serve questions: result.map (hit) -> hit.document
 
     async.parallel
-      questions  : (done) -> Question.find done
+      questions  : (done) ->
+        async.waterfall [
+          (done) -> Question.find done
+          (questions, done) ->
+            async.each questions,
+              (question, done) ->
+                question.findAnswers (error, answers) ->
+                  if error then return done error
+                  question.answers = answers
+                  do done
+              -> done null, questions
+        ], done
       unpublished: (done) -> Question.findUnpublished done
       (error, data) ->
         if error then return req.next error

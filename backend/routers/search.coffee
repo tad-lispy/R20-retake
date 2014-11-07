@@ -46,12 +46,6 @@ router.route '/'
                   document: question
                   score   : score
 
-          ### TODO:
-          * Sort by score
-          * Limit to 10
-          * Populate with answers
-          ###
-          console.dir questions
           questions = _(questions)
             .values()
             .sort 'score'
