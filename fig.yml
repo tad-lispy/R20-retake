@@ -16,9 +16,6 @@ mongo:
     "--replSet",
     "r20"
   ]
-  hostname: 'mongo_1'
 
 elasticsearch:
   image: lzrski/elasticsearch
-  links:
-    - mongo

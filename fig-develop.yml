@@ -20,15 +20,10 @@ mongo:
     - "--smallfiles"
     - "--noprealloc"
     - "--quiet"
-    - "--replSet"
-    - "r20"
-  hostname: 'mongo_1'
   ports:
-    - "27017:27017"
+    - "127.0.0.1:27017:27017"
 
 elasticsearch:
   image: lzrski/elasticsearch
-  links:
-    - mongo
   ports:
-    - "9200:9200"
+    - "127.0.0.1:9200:9200"
