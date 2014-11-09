@@ -16,27 +16,7 @@ module.exports = new View (data) ->
   } = data
 
   layout data, =>
-
-    @form
-      method: "GET"
-      =>
-        @div class: "input-group input-group-lg", =>
-          @input
-            id          : "search"
-            type        : "text"
-            name        : "search"
-            class       : "form-control"
-            placeholder : @cede => @translate "Type to search for questions..."
-            value       : query.search
-            data        :
-              shortcut    : "/"
-          @div class: "input-group-btn", =>
-            @button
-              class : "btn btn-primary"
-              type  : "submit"
-              =>
-                @i class: "fa fa-fw fa-search"
-                @translate "Search"
+    @searchForm { query, action: '/search' }
 
     do @hr
 
