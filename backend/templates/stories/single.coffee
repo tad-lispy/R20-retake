@@ -230,8 +230,8 @@ module.exports = new View (data) ->
                     @text " "
                 else @p class: "text-muted", => @translate "No answers yet"
 
-                @div class: "btn-group", =>
-                  @form
+                if user?.can 'assign question to a story'
+                  @div class: "btn-group", => @form
                     action: "/stories/#{story._id}/questions/#{question._id}"
                     method: "post"
                     =>
