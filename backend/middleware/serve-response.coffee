@@ -20,7 +20,9 @@ module.exports = (code, data) ->
   console.log ""
 
   @format
-    json: => @json code, data
+    json: =>
+      @status code
+      @json data
     html: =>
       if not @template
         console.error "[!] View for #{@req.method} #{@req.originalUrl} not implemented."
@@ -29,4 +31,5 @@ module.exports = (code, data) ->
         code       = 501
         @template  = -> "View not implemented yet. Sorry."
 
-      @send code, @template data
+      @status code
+      @send @template data
