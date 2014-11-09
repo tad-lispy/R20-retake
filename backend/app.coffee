@@ -25,12 +25,14 @@ Store    = require('connect-mongo') session
 
 app.use require('cookie-parser')()
 app.use require('body-parser').json()
-app.use require('body-parser').urlencoded()
+app.use require('body-parser').urlencoded extended: yes
 app.use require('method-override') (req, res) -> req.body._method
 app.use session
   cookie: maxAge: 24 * 60 * 60 * 1000
   secret: config.app.secret
   store : new Store db: mongoose.connections[0].db
+  resave: yes
+  saveUninitialized: no
 app.use require('passport').initialize()
 app.use require('passport').session()
 app.use require './middleware/log-request'
