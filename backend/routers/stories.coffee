@@ -54,6 +54,17 @@ router.param 'story_id', (req, res, done, id) ->
     (story, done) ->
       Question.populate story, 'questions', done
 
+    (story, done) ->
+      async.each story.questions,
+        (question, done) ->
+          question.findAnswers (error, answers) ->
+            if error then return done error
+            question.answers = answers
+            do done
+        (error) ->
+          if error then return done error
+          done null, story
+
     (story, done) -> story.findEntries action: 'draft', (error, journal) ->
       # TODO: If story is new and no drafts then 404
       done error, story, journal
