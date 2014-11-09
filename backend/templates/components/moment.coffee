@@ -1,6 +1,6 @@
 View      = require "teacup-view"
 moment    = require "moment"
-moment.lang "pl"
+moment.locale "pl"
 
 module.exports = new View (given, locale = 'pl') ->
   if      typeof given.getTimestamp       is "function" then given = do given.getTimestamp
