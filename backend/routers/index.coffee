@@ -3,6 +3,9 @@ express  = require 'express'
 
 router = new express.Router
 
+# Tags middleware
+router.use require "../middleware/tags"
+
 # List's of stories operations
 router.route '/'
   .get (req, res) ->
@@ -15,7 +18,8 @@ router.use "/#{route}", require "./#{route}" for route in [
   'participants'
   'stories'
   'questions'
-  'search'
+  # TODO: Enable when Elasticsearch works
+  # 'search'
 ]
 
 module.exports = router

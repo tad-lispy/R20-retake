@@ -1,18 +1,27 @@
 # Question model
 
 mongoose  = require "mongoose"
+_         = require 'lodash'
 
 Story     = require "./Story"
 Answer    = require "./Answer"
 
-Question  = new mongoose.Schema
+schema  = new mongoose.Schema
   text      :
     type      : String
     required  : yes
     unique    : yes
     trim      : yes
+  tags      : [
+    type      : String
+    trim      : yes
+  ]
 
-Question.methods.findStories = (conditions, callback) ->
+schema.pre "validate", (done) ->
+  @tags = _.unique @tags
+  do done
+
+schema.methods.findStories = (conditions, callback) ->
   if (not callback) and typeof conditions is "function"
     callback = conditions
     conditions = {}
@@ -21,7 +30,7 @@ Question.methods.findStories = (conditions, callback) ->
 
   Story.find conditions, callback
 
-Question.methods.findAnswers = (conditions, callback) ->
+schema.methods.findAnswers = (conditions, callback) ->
   if (not callback) and typeof conditions is "function"
     callback = conditions
     conditions = {}
@@ -33,12 +42,13 @@ Question.methods.findAnswers = (conditions, callback) ->
     .populate 'author'
     .exec callback
 
-Question.plugin (require "./plugins/Journal"),
+schema.plugin (require "./plugins/Journal"),
   populate:
     path  : "meta.author"
     model : "Participant"
 
-Question.plugin require('./plugins/Search'),
-  collection: 'questions'
+# TODO: Enable when Elasticsearch works
+# schema.plugin require('./plugins/Search'),
+#   collection: 'questions'
 
-module.exports = mongoose.model 'Question', Question
+module.exports = mongoose.model 'Question', schema

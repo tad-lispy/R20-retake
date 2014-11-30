@@ -14,17 +14,20 @@ module.exports = new View (data) ->
     user
     csrf
     user_drafted
+    tags
   } = data
 
   data.classes ?= []
   data.classes.push "question"
   if entry then data.classes.push "draft"
+  data.scripts = [
+    '//cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2.min.js'
+    '/scripts/tags.js'
+  ]
 
-
-  # TODO: if used as subtitle it shows twice on the page (as subtitle and in jumbotron)
-  # subtitle =  if draft? then draft.text else
-  #             if not question.isNew then question.text
-  # if subtitle then data.subtitle = subtitle
+  subtitle =  if draft? then draft.text else
+              if not question.isNew then question.text
+  if subtitle then data.subtitle = subtitle
 
   layout data, =>
     if entry?
@@ -39,6 +42,9 @@ module.exports = new View (data) ->
     @div class: "jumbotron", =>
       if entry?
         @markdown entry.data.text
+        for tag in entry.data.tags or []
+          @span class: 'label label-primary', tag
+          @text " "
 
         @form
           action: "/questions/#{question.id}/journal/#{entry.id}/apply"
@@ -73,7 +79,12 @@ module.exports = new View (data) ->
           @translate "Not published yet."
 
       else
-        @strong question.text
+        @markdown question.text
+
+        for tag in question.tags or []
+          @span class: 'label label-primary', tag
+          @text " "
+
 
         @div class: "clearfix", => @div class: "btn-group pull-right", =>
           @button
@@ -123,6 +134,7 @@ module.exports = new View (data) ->
           action  : "/questions/#{question.id}"
           csrf    : csrf
           question: entry?.data or question
+          tags    : tags
 
     if entry? or question.isNew
       @h4 class: "text-muted", =>

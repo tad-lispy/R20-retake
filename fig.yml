@@ -6,16 +6,20 @@ web:
     - .:/app
   links:
     - mongo
-    - elasticsearch
+    # - elasticsearch
 
 mongo:
-  image: mongo
+  image: mongo:2.6
   command:  [
     "mongod",
     "--quiet",
-    "--replSet",
-    "r20"
+    # "--replSet",
+    # "r20"
   ]
+  ports:
+    - 127.0.0.1:27017:27017
+  volumes:
+    - ./data/mongo:/data/db
 
-elasticsearch:
-  image: lzrski/elasticsearch
+# elasticsearch:
+#   image: lzrski/elasticsearch

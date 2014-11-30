@@ -12,6 +12,7 @@ module.exports = (code, data) ->
   _.extend data, _.pick @req, [
     'user'
     'query'
+    'tags'
   ]
 
 

@@ -4,21 +4,26 @@ module.exports = new View (attributes) ->
   {
     query
     action
+    tags
   } = attributes
+
   @form
+    id    : "search"
     method: "get"
     action: action if action
-    id          : "search"
     =>
       @div class: "form-group", =>
-        @textarea
-          type        : "text"
-          name        : "search"
-          class       : "form-control input-lg"
-          placeholder : @cede => @translate "What seems to be the problem?"
+        @select
+          name        : "tags"
+          class       : "form-control tags"
+          multiple    : yes
+          placeholder : @cede =>
+            @translate "Select tags to view corresponding questions."
           data        :
             shortcut    : "/"
-          query.search
+          =>
+            for tag in tags
+              @option selected: tag in (query.tags or []), tag
 
       @div class: "form-group", =>
         @button

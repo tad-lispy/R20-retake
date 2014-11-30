@@ -32,7 +32,8 @@ Story.plugin (require "./plugins/Journal"),
     model : "Question"
   ]
 
-Story.plugin require('./plugins/Search'),
-  collection: 'stories'
+# TODO: Enable when Elasticsearch works
+# Story.plugin require('./plugins/Search'),
+#   collection: 'stories'
 
 module.exports = mongoose.model 'Story', Story

@@ -16,15 +16,20 @@ router.route '/'
   .get (req, res) ->
     res.template = require '../templates/questions/list'
 
-    if req.query.search
-      return Question.search req.query.search, (error, result) ->
-        if error then return req.next error
-        res.serve questions: result.map (hit) -> hit.document
+    # TODO: Enable when elasticsearch works again
+    # if req.query.search
+    #   return Question.search req.query.search, (error, result) ->
+    #     if error then return req.next error
+    #     res.serve questions: result.map (hit) -> hit.document
+
+
+    { tags } = req.query
+    query = if tags then {tags: $all: tags} else { }
 
     async.parallel
-      questions  : (done) ->
+      questions   : (done) ->
         async.waterfall [
-          (done) -> Question.find done
+          (done) -> Question.find query, done
           (questions, done) ->
             async.each questions,
               (question, done) ->
@@ -34,14 +39,16 @@ router.route '/'
                   do done
               -> done null, questions
         ], done
-      unpublished: (done) -> Question.findUnpublished done
+      unpublished : (done) -> Question.findUnpublished done
+
       (error, data) ->
         if error then return req.next error
         res.serve data
 
   .post approve('suggest a new question'), (req, res) ->
-    data = _.pick req.body, ['text']
-    question = new Question data
+    { text, tags } = req.body
+    if typeof tags is 'string' then tags = tags.split ','
+    question = new Question { text, tags }
     question.saveDraft author: req.user.id, (error, draft)->
       if error then return req.next error
       res.redirect "/questions/#{question.id}/journal/#{draft.id}"
@@ -118,9 +125,10 @@ router.route '/:id'
       'unpublished'
       'user_drafted'
     ]
-  .post (req, res) ->
+  .post (req, res) -> # TODO: put?
     data = _.pick req.body, [
       'text'
+      'tags'
     ]
     { question } = req
     question.set data

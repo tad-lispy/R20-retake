@@ -127,5 +127,7 @@
 	"send an e-mail": "wyślij wiadomość",
 	"Please consider publishing draft of a story at: %s": "Proszę o rozważenie publikacji szkicu pod adresem: %s",
 	"We are working on an automatic draft approval process. In the mean time please sent us an e-mail to `%s`. Please remember to include this drafts address, i.e. `%s`. Thank you and sorry for this inconvenience.": "Pracujemy nad automatycznym systemem powiadamiania dla zgłaszanych opisów przypadku. Tymczasem prosimy o przesłanie nam mailem na adres `%s` adresu URL zgłaszanego szkicu (tj. `%s`). Dziękujemy i przepraszamy :)",
-	"Administrative tasks": "Administrative tasks"
+	"Question tags:": "Tagi zagadnienia:",
+	"Provide some tags to make it searchable...": "Podaj tagi aby umożliwić wyszukanie tego zagadnienia...",
+	"Select tags to view corresponding questions.": "Select tags to view corresponding questions."
 }

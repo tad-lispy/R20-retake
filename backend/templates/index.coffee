@@ -8,10 +8,11 @@ module.exports = new View (data) ->
   {
     query
     entries
+    tags
   } = data
 
   layout data, =>
-    @searchForm { query, action: '/search' }
+    @searchForm { query, tags, action: '/questions' }
     do @hr
     # @newsFeed { entries }
     @markdown text

@@ -8,8 +8,9 @@ module.exports = new View
       method
       csrf
       question
+      tags
     } = options
-    
+
     if method is "PUT"
       @p => @translate "Doesn't suit your legal taste? Please make adjustments as you see fit."
     else
@@ -31,15 +32,26 @@ module.exports = new View
 
         @div class: "form-group", =>
           @label for: "text", class: "sr-only", => @translate "Question text:"
-          @div class: "input-group", =>
-            @input
-              type        : "text"
-              name        : "text"
-              class       : "form-control"
-              value       : question?.text
-              placeholder : @cede => @translate "Enter the text of a question..."
-            @div class: "input-group-btn", =>
-              @button
-                type        : "submit"
-                class       : "btn btn-primary"
-                => @translate "ok"
+          @input
+            type        : "text"
+            name        : "text"
+            class       : "form-control"
+            value       : question?.text
+            required    : yes
+            placeholder : @cede => @translate "Enter the text of a question..."
+        @div class: "form-group", =>
+          @label for: "tags", class: "sr-only", => @translate "Question tags:"
+          @input
+            name        : "tags"
+            class       : "tags form-control"
+            value       : question?.tags
+            data        :
+              placeholder : @cede => @translate "Provide some tags to make it searchable..."
+              options     : tags
+              select      : yes
+
+        @div class: "form-group", =>
+          @button
+            type        : "submit"
+            class       : "btn btn-primary btn-block"
+            => @translate "ok"

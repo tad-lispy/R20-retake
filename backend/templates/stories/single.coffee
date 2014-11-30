@@ -15,15 +15,15 @@ module.exports = new View (data) ->
   data.classes  ?=                []
   data.classes.push               "story"
   if entry then data.classes.push "draft"
+  data.scripts = [
+    "/scripts/assign-question.js"
+    "//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.45/jquery.form.min.js"
+  ]
 
 
   data.subtitle = @cede => @translate "The case of %s", moment(story._id.getTimestamp()).format 'LL'
 
   layout data, =>
-    data.scripts.concat [
-      "/scripts/assign-question.js"
-      "//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.45/jquery.form.min.js"
-    ]
 
     # The story
     if story.isNew

@@ -35,6 +35,8 @@ module.exports = new View (options = {}, content) ->
         @link rel: "stylesheet", href: url for url in [
           "//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"
           "//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"
+          "//cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2.min.css"
+          "//cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2-bootstrap.min.css"
           "/styles/R20.css"
         ]
 
@@ -70,10 +72,11 @@ module.exports = new View (options = {}, content) ->
                   @profileBox participant: user
 
           @footer class: "container", =>
-            if user?.can 'recreate search index' then @form
-                action: '/search/reindex'
-                method: 'POST'
-                => @button class: 'btn btn-link btn-sm', 'Reindex'
+            # TODO: Enable when Elasticsearch works
+            # if user?.can 'recreate search index' then @form
+            #     action: '/search/reindex'
+            #     method: 'POST'
+            #     => @button class: 'btn btn-link btn-sm', 'Reindex'
 
             do @hr
 
@@ -109,6 +112,8 @@ module.exports = new View (options = {}, content) ->
             "https://login.persona.org/include.js"
             "/scripts/authenticate.js"
             "/scripts/modals.js"
+            "//cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2.min.js"
+            "/scripts/tags.js"
           ].concat scripts or []
 
           if styles? then @link rel: "stylesheet", href: url for url in styles

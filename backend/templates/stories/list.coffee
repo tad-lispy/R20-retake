@@ -19,38 +19,9 @@ module.exports = new View (data) ->
 
   layout data, =>
 
-    @form
-      method: "GET"
-      class : "form"
-      =>
-        @div class: "input-group input-group-lg", =>
-          @input
-            id          : "search"
-            type        : "text"
-            name        : "search"
-            class       : "form-control"
-            placeholder : @cede => @translate "Type to search for story..."
-            value       : query.search
-            data        :
-              shortcut    : '/'
-          @div class: "input-group-btn", =>
-            @button
-              class : "btn btn-primary"
-              type  : "submit"
-              =>
-                @i class: "fa fa-fw fa-search"
-                @text "Search"
-            if user?.can 'tell a story' then @dropdown items: [
-              title : @cede => @translate "new story"
-              icon  : "plus-circle"
-              data  :
-                toggle  : "modal"
-                target  : "#story-new-dialog"
-                shortcut: "n"
-              herf  : "#new-story"
-            ]
-
-    do @hr
+    # TODO: Search stories by questions' tags
+    # @searchForm { query }
+    # do @hr
 
     if stories.length # then @div class: "list-group", =>
       for story in stories
@@ -75,12 +46,24 @@ module.exports = new View (data) ->
           @translate "The case of %s", moment(story._id.getTimestamp()).format 'LL'
 
 
-    if user?.can 'tell a story' then @modal
-      title : @cede => @translate "New story"
-      id    : "story-new-dialog"
-      =>
-        @p => @translate "Please tell us your story."
-        @storyForm
-          method  : "POST"
-          action  : "/stories/"
-          csrf    : csrf
+    if user?.can 'tell a story'
+      @a
+        class : "btn btn-default"
+        herf  : "#new-story"
+        data  :
+          toggle  : "modal"
+          target  : "#story-new-dialog"
+          shortcut: "n"
+        =>
+          @i class: "fa fa-fw fa-plus-circle"
+          @translate "new story"
+
+      @modal
+        title : @cede => @translate "New story"
+        id    : "story-new-dialog"
+        =>
+          @p => @translate "Please tell us your story."
+          @storyForm
+            method  : "POST"
+            action  : "/stories/"
+            csrf    : csrf
