@@ -11,7 +11,7 @@ module.exports = new View
       answer
       question
     } = options
-    
+
     @form
       method: "post"
       action: action
@@ -20,11 +20,14 @@ module.exports = new View
           type  : "hidden"
           name  : "_csrf"
           value : csrf
-        # TODO: See above
         if options.method? then @input
           type  : "hidden"
           name  : "_method"
           value : method
+        @input
+          type  : "hidden"
+          name  : "author"
+          value : answer.author._id
 
         @div class: "form-group", =>
           @label for: "text", class: "sr-only", => @translate "What's the correct answer?"

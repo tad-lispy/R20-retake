@@ -19,13 +19,6 @@ router.route '/'
     # res.template = require '../templates/questions/list'
     { question } = req
 
-    if req.query.search
-      return Answer.search req.query.search, (error, result) ->
-        if error then return done error
-        res.serve answers: result
-          .map    (hit)      -> hit.document
-          .filter (document) -> document.question is question.id
-
     async.parallel
       answers    : (done) -> Answer.find
         question: question.id
@@ -91,7 +84,7 @@ router.param 'id', (req, res, done, id) ->
     message: "#{id} is not a valid answer identifier. Check your url."
 
   async.waterfall [
-    (done) -> Answer.findByIdOrCreate id, done
+    (done) -> Answer.findByIdOrCreate id, question: req.question._id, done
 
     (answer, done) -> answer.populate path: 'author question', done
 
@@ -139,34 +132,26 @@ router.route '/:id'
 
   # Store new draft of an answer
   .post approve('answer a question'), (req, res) ->
+    console.log "Saving new draft of an answer"
     data = _.pick req.body, [
       'text'
+      'author'
     ]
     {
       answer
       question
     } = req
+    console.dir answer
+    data.question = question
     answer.set data
     answer.saveDraft author: req.user.id, (error, draft) ->
-      if error then return done error
+      if error then return req.next error
       res.redirect "/questions/#{question.id}/answers/#{answer.id}/journal/#{draft.id}"
 
   .delete approve('unpublish a story'), (req, res) ->
     req.answer.removeDocument author: req.user.id, (error, entry) ->
       res.redirect 'back'
 
-# # Questions' operations
-# router.route '/:id/stories'
-#   .get (req, res) ->
-#     res.serve 'A list of stories related to question'
-#
-# # Journal operations
-# # TODO: own router?
-#
-# router.route '/:id/journal'
-#   .get (req, res) ->
-#     res.serve 'Get a list of journal entries for this question'
-#
 router.route '/:id/journal/:entry_id'
   .get (req, res) ->
     res.template = require "../templates/answers/single"
