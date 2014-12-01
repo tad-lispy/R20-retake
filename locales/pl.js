@@ -130,5 +130,7 @@
 	"Question tags:": "Słowa kluczowe zagadnienia:",
 	"Provide some tags to make it searchable...": "Podaj słowa kluczowe aby umożliwić wyszukanie tego zagadnienia...",
 	"Select tags to view corresponding questions.": "Wskaż słowa kluczowe aby zobaczyć pasujące pytania.",
-	"Assign new questions to this story": "Powiąż z tym przypadkiem nowe zagadnienia"
+	"Assign new questions to this story": "Powiąż z tym przypadkiem nowe zagadnienia",
+	"There is at least one draft of your answer to this question": "Istnieje co najmniej jeden szkic odpowiedzi twojego autorstwa.",
+	"see drafts": "zobacz szkice"
 }

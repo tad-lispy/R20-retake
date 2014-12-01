@@ -150,11 +150,11 @@ router.route '/:id'
     answer.saveDraft author: req.user.id, (error, draft) ->
       if error then return done error
       res.redirect "/questions/#{question.id}/answers/#{answer.id}/journal/#{draft.id}"
-#
-# .delete approve('unpublish a question'), (req, res) ->
-#   req.question.removeDocument author: req.user.id, (error, entry) ->
-#     res.redirect 'back'
-#
+
+  .delete approve('unpublish a story'), (req, res) ->
+    req.answer.removeDocument author: req.user.id, (error, entry) ->
+      res.redirect 'back'
+
 # # Questions' operations
 # router.route '/:id/stories'
 #   .get (req, res) ->
