@@ -22,11 +22,16 @@ router.route '/'
           (done) ->
             # TODO: Always use Story.search
             if req.query.search
-              return Story.search req.query.search, (error, result) ->
-                if error then return done error
-                done null, result.map (hit) -> hit.document
+              return req.next new Error2 "Search doesn't work ATM"
+              # return Story.search req.query.search, (error, result) ->
+              #   if error then return done error
+              #   done null, result.map (hit) -> hit.document
 
-            else Story.find done
+            else
+              Story
+                .find {}
+                .sort _id: -1
+                .exec done
           (stories, done) ->
             Question.populate stories, 'questions', done
         ], done

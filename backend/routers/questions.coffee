@@ -29,7 +29,11 @@ router.route '/'
     async.parallel
       questions   : (done) ->
         async.waterfall [
-          (done) -> Question.find query, done
+          (done) ->
+            Question
+              .find query
+              .sort _id: -1
+              .exec done
           (questions, done) ->
             async.each questions,
               (question, done) ->
