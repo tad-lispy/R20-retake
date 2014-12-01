@@ -63,7 +63,7 @@ module.exports = new View (data) ->
                   @i class: "fa fa-fw fa-check-square"
                   @translate "apply this draft"
 
-              @dropdown items: [
+              if user?.can 'suggest a new question' then @dropdown items: [
                 title : @cede => @translate "make changes"
                 href  : "#edit-question"
                 icon  : "edit"
@@ -99,7 +99,7 @@ module.exports = new View (data) ->
               @text " "
               @translate "sample stories (%d)", stories?.length or 0
 
-          @dropdown items: [
+          if user?.can 'suggest a new question' then @dropdown items: [
             title : @cede => @translate "make changes"
             href  : "#edit"
             icon  : "edit"
