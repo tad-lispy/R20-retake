@@ -1,3 +1,5 @@
+# TODO: Remove. It's not currently used, but has some neat solutions.
+
 $ ->
   $('[data-search]').each ->
     element     = $ @

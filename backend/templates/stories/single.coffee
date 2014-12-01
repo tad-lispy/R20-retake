@@ -11,15 +11,12 @@ module.exports = new View (data) ->
     csrf
     query
     user
+    tags
+    questions # questions suggested for assignment, assigned ones are in story.questions
   } = data
   data.classes  ?=                []
   data.classes.push               "story"
   if entry then data.classes.push "draft"
-  data.scripts = [
-    "/scripts/assign-question.js"
-    "//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.45/jquery.form.min.js"
-  ]
-
 
   data.subtitle = @cede => @translate "The case of %s", moment(story._id.getTimestamp()).format 'LL'
 
@@ -125,149 +122,73 @@ module.exports = new View (data) ->
                     @translate "Remove!"
 
       # The questions
-      # TODO: move to own module
+      @h4 class: 'text-muted', =>
+        @i class: 'fa fa-fw fa-question-circle'
+        @translate "Legal questions abstracted from this story"
 
-      @div class: "panel panel-primary", =>
-        @div class: "panel-heading", =>
-          @strong
-            class: "panel-title"
-            => @translate "Legal questions abstracted from this story"
-
-          @div class: "btn-group pull-right", =>
-            @button
-              type  : "button"
-              class : "btn btn-default btn-xs"
-              data  :
-                toggle  : "collapse"
-                target  : "#assignment-list"
-                shortcut: "a q"
+      if story.questions?.length then for question in story.questions
+        @questionItem {question}, =>
+          if user?.can 'assign question to a story'
+            @form
+              class : "form pull-right"
+              action: "/stories/#{story._id}/questions/#{question._id}"
+              method: "post"
               =>
-                @i class: "fa fa-fw fa-link"
-                @translate "assign"
-
-        @div
-          class : "panel-body collapse"
-          id    : "assignment-list"
-          =>
-            @div class: "well", =>
-              # Search form
-              @form
-                data        :
-                  search      : "questions"
-                  target      : "#assign-questions-list"
-                  source      : "#assign-question-template"
-                =>
-                  @div class: "form-group", =>
-                    @div class: "input-group input-group-sm", =>
-                      @input
-                        type        : "text"
-                        name        : "search"
-                        class       : "form-control"
-                        placeholder : @cede => @translate "Type to search for a question to assign..."
-                        value       : query.search
-                      @div class: "input-group-btn", =>
-                        @button
-                          class   : "btn btn-primary"
-                          type    : "submit"
-                          disabled: true
-                          =>
-                            @i class: "fa fa-fw fa-search"
-                            @translate "Search"
-
-              @div id: "assign-questions-list", =>
-                @div class: "hide", id: "assign-question-template", =>
-                  @form
-                    action: "/stories/#{story._id}/questions"
-                    method: "post"
-                    =>
-                      @div class: "form-group", =>
-                        @input
-                          type  : "hidden"
-                          name  : "_id"
-
-                        @input
-                          type  : "hidden"
-                          name  : "_csrf"
-                          value : csrf
-
-                        @button
-                          type    : "submit"
-                          class   : "btn btn-block"
-                          data    : fill: "text"
-
-              @div class: "form-group", =>
+                @input
+                  type  : "hidden"
+                  name  : "_csrf"
+                  value : csrf
+                @input
+                  type  : "hidden"
+                  name  : "_method"
+                  value : "DELETE"
                 @button
-                  type    : "button"
-                  class   : "btn btn-block btn-primary"
-                  data    :
-                    toggle  : "modal"
-                    target  : "#new-question-dialog"
-                    shortcut: "n q"
+                  type  : "submit"
+                  class : "btn btn-danger btn-xs"
                   =>
-                    @i class: "fa fa-fw fa-star"
-                    @translate "Add a brand new question"
+                    @i class: "fa fa-fw fa-unlink"
+                    @translate "unassign"
 
-              @modal """
-               "question-edit-dialog",
-                action: "/question/"
-                # TODO: after submission redirect back to this page!
-              """
+      else
+        @div class: 'alert alert-info', =>
+          @translate 'No questions abstracted yet.'
 
+      # The assign form
+      @h4 class: 'text-muted', =>
+        @i class: 'fa fa-fw fa-plus-circle'
+        @translate "Assign new questions to this story"
 
-        @div class: "list-group", =>
-          if story.questions?.length
-            for question in story.questions
-              @a href: "/questions/#{question._id}", class: "list-group-item", =>
-                @span class: "badge", question.answers?.length or 0
-                @h4
-                  class: "list-group-item-heading"
-                  question.text
-
-                if question.answers?.length then @p =>
-                  @translate "Answers by: "
-                  for answer in question.answers
-                    @text answer.author?.name or @cede => @translate "unknown author"
-                    @text " "
-                else @p class: "text-muted", => @translate "No answers yet"
-
-                if user?.can 'assign question to a story'
-                  @div class: "btn-group", => @form
-                    action: "/stories/#{story._id}/questions/#{question._id}"
+      if user?.can 'assign question to a story'
+        @div class: "panel panel-primary", =>
+          @div class: "panel-body", =>
+            @searchForm {
+              query
+              tags
+              params:
+                action: 'assign'
+            }
+            if questions
+              if questions.length then for question in questions
+                @questionItem {question}, =>
+                  @form
+                    class : "form pull-right"
+                    action: "/stories/#{story._id}/questions/"
                     method: "post"
                     =>
+                      @input
+                        type  : "hidden"
+                        name  : "_id"
+                        value : question._id
                       @input
                         type  : "hidden"
                         name  : "_csrf"
                         value : csrf
-                      @input
-                        type  : "hidden"
-                        name  : "_method"
-                        value : "DELETE"
                       @button
                         type  : "submit"
-                        class : "btn btn-danger btn-xs"
+                        class : "btn btn-success btn-xs"
                         =>
-                          @i class: "fa fa-fw fa-unlink"
-                          @translate "unasign"
-
-          else @a
-            href: "#assign-question"
-            class: "list-group-item"
-            data  :
-              toggle: "collapse"
-              target: "#assignment-list"
-            =>
-              @h4 class: "text-muted", =>
-                @translate "No questions abstracted yet."
-              @p class: "text-muted", =>
-                @i class: "fa fa-fw fa-plus-circle"
-                @translate "Do it now!"
-
-      @modal
-        id      : "new-question-dialog"
-        title   : @cede => @translate "Add new question"
-        =>
-          @questionForm
-            action  : "/questions/"
-            method  : "POST"
-            csrf    : csrf
+                          @i class: "fa fa-fw fa-link"
+                          @translate "assign"
+              else
+                @div class: "alert alert-info", =>
+                  @translate "No questions like that found. Sorry :P"

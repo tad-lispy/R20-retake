@@ -23,23 +23,9 @@ module.exports = new View (data) ->
     do @hr
 
     if questions.length
-      for question in questions
-        @div class: "panel panel-default", =>
-          @a href: "/questions/#{question._id}", class: "panel-body list-group-item lead", =>
-            @markdown question.text
-          @div class: "panel-footer", =>
-            for tag in question.tags or []
-              @span class: 'label label-primary', tag
-              @text " "
-            if question.answers?.length
-              @ul class: "list-inline", =>
-                @strong => @translate "%d answers by:", question.answers.length
-                for answer in question.answers
-                  @li => @a href: "/questions/#{question._id}/##{answer._id}", answer.author?.name or @cede => @translate "unknown author"
-
-            else @strong => @translate "No answers yet."
-
-    else @div class: "alert alert-info", => @translate "No questions like that found. Sorry :P"
+      @questionItem {question} for question in questions
+    else
+      @div class: "alert alert-info", => @translate "No questions like that found. Sorry :P"
 
     if unpublished?.length
       @h3 => @translate "Unpublished questions"

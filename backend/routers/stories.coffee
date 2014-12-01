@@ -95,7 +95,18 @@ router.route '/:story_id'
       story
       journal
     } = req
-    res.serve { story, journal }
+    if req.query.action is 'assign'
+      { tags } = req.query
+      query = if tags then {tags: $all: tags} else { }
+      Question
+        .find query
+        .where '_id'
+        .nin story.questions
+        .exec (error, questions) ->
+          if error then return req.next error
+          res.serve { story, journal, questions }
+
+    else res.serve { story, journal }
   .post (req, res) ->
     data = _.pick req.body, [
       'text'
