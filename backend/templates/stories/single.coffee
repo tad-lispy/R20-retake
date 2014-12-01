@@ -154,11 +154,11 @@ module.exports = new View (data) ->
           @translate 'No questions abstracted yet.'
 
       # The assign form
-      @h4 class: 'text-muted', =>
-        @i class: 'fa fa-fw fa-plus-circle'
-        @translate "Assign new questions to this story"
-
       if user?.can 'assign question to a story'
+        @h4 class: 'text-muted', =>
+          @i class: 'fa fa-fw fa-plus-circle'
+          @translate "Assign new questions to this story"
+
         @div class: "panel panel-primary", =>
           @div class: "panel-body", =>
             @searchForm {
