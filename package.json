@@ -1,6 +1,6 @@
 {
   "name": "R20",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Legal knowledge aggregator",
   "main": "build/backend/app.js",
   "scripts": {
