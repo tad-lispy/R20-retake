@@ -148,7 +148,7 @@ router.route '/:id'
       if error then return req.next error
       res.redirect "/questions/#{question.id}/answers/#{answer.id}/journal/#{draft.id}"
 
-  .delete approve('unpublish a story'), (req, res) ->
+  .delete approve('unpublish an answer'), (req, res) ->
     req.answer.removeDocument author: req.user.id, (error, entry) ->
       res.redirect 'back'
 

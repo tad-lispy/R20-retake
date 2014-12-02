@@ -33,19 +33,20 @@ participants:
       as     : 'reader'
       can    : [
         'review drafts of a story'
-        'suggest a new question'
         'answer a question'
       ]
     lawyer:
       as    : 'student'
       can   : [
-        'publish a question'
         'publish an answer'
       ]
     editor:
       as    : 'lawyer'
       can   : [
         'publish a story'
+        'publish a question'
+        'unpublish an answer'
+        'suggest a new question'
         'assign question to a story'
       ]
     administrator:
