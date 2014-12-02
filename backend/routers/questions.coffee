@@ -129,7 +129,7 @@ router.route '/:id'
       'unpublished'
       'user_drafted'
     ]
-  .post (req, res) -> # TODO: put?
+  .post approve('suggest a new question'), (req, res) -> # TODO: put?
     data = _.pick req.body, [
       'text'
       'tags'
@@ -140,7 +140,7 @@ router.route '/:id'
       if error then return req.next error
       res.redirect "/questions/#{question.id}/journal/#{draft.id}"
 
-  .delete approve('unpublish a question'), (req, res) ->
+  .delete approve('publish a question'), (req, res) ->
     req.question.removeDocument author: req.user.id, (error, entry) ->
       res.redirect 'back'
 
