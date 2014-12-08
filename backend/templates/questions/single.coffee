@@ -186,33 +186,7 @@ module.exports = new View (data) ->
       @h4 class: "text-muted", =>
         @i class: "fa fa-puzzle-piece fa-fw"
         @translate "Answers"
-      if answers?.length then for answer in answers
-        @div class: "panel panel-default", id: "answer-#{answer._id}", =>
-          @div class: "panel-heading clearfix", =>
-            @strong class: "text-muted", =>
-              @translate "by %s (%s):",
-                answer.author?.name or @cede => @translate "unknown author"
-                @cede => @moment answer
-            @a
-              href  : "/questions/#{question._id}/answers/#{answer._id}"
-              class: "btn btn-xs pull-right"
-              => @i class: "fa fa-expand"
-
-          @div class: "panel-body clearfix", =>
-
-            @markdown answer.text
-
-          # TODO: use client side js to deal with modals and forms
-          @modal
-            title : @cede => @translate "Edit answer by %s",
-              answer.author?.name or @cede => @translate "unknown author"
-            id    : "answer-#{answer._id}-edit-dialog"
-            => @answerForm
-              method  : "POST"
-              action  : "/questions/#{question._id}/answers/#{answer._id}/drafts"
-              csrf    : csrf
-              answer  : answer
-
+      if answers?.length then @answerItem {answer} for answer in answers
 
       else @div class: "alert alert-info", =>
         @p =>

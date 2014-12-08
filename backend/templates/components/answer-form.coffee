@@ -27,7 +27,7 @@ module.exports = new View
         @input
           type  : "hidden"
           name  : "author"
-          value : answer.author._id
+          value : answer.author?._id or "" # TODO: What to do if unknown author?
 
         @div class: "form-group", =>
           @label for: "text", class: "sr-only", => @translate "What's the correct answer?"
