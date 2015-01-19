@@ -86,10 +86,12 @@ router.param 'id', (req, res, done, id) ->
   async.waterfall [
     (done) -> Answer.findByIdOrCreate id, question: req.question._id, done
 
-    (answer, done) -> answer.populate path: 'author question', done
+    (answer, done) ->
+      answer.populate path: 'author question', done
 
-    (answer, done) -> answer.findEntries action: 'draft', (error, journal) ->
-      done error, answer, journal
+    (answer, done) ->
+      answer.findEntries action: 'draft', (error, journal) ->
+        done error, answer, journal
 
     (answer, journal, done) ->
       if answer.isNew and not journal.length then return done new Error2
@@ -98,7 +100,7 @@ router.param 'id', (req, res, done, id) ->
         message: "There is no answer at this address."
 
       Participant.populate journal,
-        path: 'meta.author'
+        path: 'meta.author data.author'
         (error, journal) ->
           done error, answer, journal
 
