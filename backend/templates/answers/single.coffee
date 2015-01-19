@@ -20,6 +20,8 @@ module.exports = new View (data) ->
 
   unless answer.isNew
     author = entry?.data.author or answer.author
+
+    # TODO: Title and subtitle doesnt work. Why?
     data.title    = @cede => @translate "%s answers:", author?.name or @cede => @translate "unknown author"
     data.subtitle = question.text
 
@@ -34,6 +36,15 @@ module.exports = new View (data) ->
 
     # The answer
     @div class: "jumbotron", =>
+      @header =>
+        @h2 =>
+          @small =>
+            @translate "%s answers:",
+              author?.name or @cede => @translate "unknown author"
+          do @br
+          @text question.text
+          do @hr
+
       if entry?
         @markdown entry.data.text
 
