@@ -18,7 +18,7 @@ module.exports = new View (data) ->
   if entry then question ?= entry.data.question
   else          question ?= answer.question
 
-  unless answer.isNew
+  unless answer.isNew and not entry
     author = entry?.data.author or answer.author
 
     # TODO: Title and subtitle doesnt work. Why?
